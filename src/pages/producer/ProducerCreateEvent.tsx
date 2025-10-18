@@ -43,7 +43,7 @@ const ProducerCreateEvent = ({ onComplete, onBack }: ProducerCreateEventProps) =
     <div className="min-h-screen producer-theme bg-producer-background text-producer-foreground animate-fade-in">
       <header className="bg-producer-surface/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-producer-card">
         <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <button onClick={handlePrevious} className="text-producer-foreground hover:text-primary transition-smooth group">
+          <button onClick={handlePrevious} className="text-producer-foreground hover:text-producer-gold transition-smooth group">
             <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-smooth" />
           </button>
           <img src={producerLogo} alt="Arena BRB Produtor" className="h-12 hover-producer-glow transition-smooth" />
@@ -59,9 +59,9 @@ const ProducerCreateEvent = ({ onComplete, onBack }: ProducerCreateEventProps) =
                 <div
                   className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-smooth ${
                     step > s.number
-                      ? "gradient-producer-primary border-primary shadow-producer-glow"
+                      ? "gradient-producer-accent border-primary shadow-producer-glow"
                       : step === s.number
-                      ? "border-primary text-primary shadow-producer-glow"
+                      ? "border-primary text-producer-gold shadow-producer-glow"
                       : "border-border text-muted-foreground"
                   }`}
                 >
@@ -74,7 +74,7 @@ const ProducerCreateEvent = ({ onComplete, onBack }: ProducerCreateEventProps) =
                 {idx < steps.length - 1 && (
                   <div
                     className={`flex-1 h-1 mx-2 rounded-full transition-smooth ${
-                      step > s.number ? "gradient-producer-primary shadow-producer-glow" : "bg-border"
+                      step > s.number ? "gradient-producer-accent shadow-producer-glow" : "bg-border"
                     }`}
                   />
                 )}
@@ -82,18 +82,18 @@ const ProducerCreateEvent = ({ onComplete, onBack }: ProducerCreateEventProps) =
             ))}
           </div>
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-2 gradient-producer-primary bg-clip-text text-transparent">{steps[step - 1].title}</h2>
+            <h2 className="text-3xl font-bold mb-2 gradient-producer-accent bg-clip-text text-transparent">{steps[step - 1].title}</h2>
             <p className="text-muted-foreground text-lg">{steps[step - 1].description}</p>
           </div>
         </div>
 
         {/* Step Content */}
-        <div className="bg-producer-surface rounded-2xl border border-border p-8 shadow-producer-card hover:border-primary/30 transition-smooth">
+        <div className="bg-producer-surface rounded-2xl border border-border p-8 shadow-producer-card hover:border-producer-gold/30 transition-smooth">
           {step === 1 && (
             <div className="space-y-6">
               <h3 className="text-2xl font-bold mb-4">Selecione o Local</h3>
               <div className="space-y-4">
-                <button className="w-full p-6 border-2 border-primary gradient-producer-primary/10 rounded-2xl text-left shadow-producer-glow hover-producer-glow transition-smooth">
+                <button className="w-full p-6 border-2 border-primary gradient-producer-accent/10 rounded-2xl text-left shadow-producer-glow hover-producer-glow transition-smooth">
                   <div className="font-bold text-xl mb-2">Arena BRB Mané Garrincha</div>
                   <div className="text-sm text-muted-foreground">
                     Capacidade: 72.000 pessoas • SRPN, Brasília - DF
@@ -220,13 +220,13 @@ const ProducerCreateEvent = ({ onComplete, onBack }: ProducerCreateEventProps) =
           {step === 5 && (
             <div className="text-center py-8 space-y-6">
               <div className="relative inline-block">
-                <div className="w-24 h-24 gradient-producer-primary rounded-full flex items-center justify-center mx-auto shadow-producer-glow">
+                <div className="w-24 h-24 gradient-producer-accent rounded-full flex items-center justify-center mx-auto shadow-producer-glow">
                   <Check className="w-12 h-12 text-secondary-foreground" />
                 </div>
-                <div className="absolute -inset-4 gradient-producer-primary blur-2xl opacity-30 animate-pulse" />
+                <div className="absolute -inset-4 gradient-producer-accent blur-2xl opacity-30 animate-pulse" />
               </div>
               <div>
-                <h3 className="text-3xl font-bold mb-3 gradient-producer-primary bg-clip-text text-transparent">Solicitação Enviada!</h3>
+                <h3 className="text-3xl font-bold mb-3 gradient-producer-accent bg-clip-text text-transparent">Solicitação Enviada!</h3>
                 <p className="text-muted-foreground text-lg max-w-md mx-auto">
                   Recebemos sua solicitação de evento. Nossa equipe entrará em contato com você
                   dentro de 48 horas para finalizar os detalhes.
@@ -242,7 +242,7 @@ const ProducerCreateEvent = ({ onComplete, onBack }: ProducerCreateEventProps) =
             <Button
               variant="outline"
               onClick={handlePrevious}
-              className="flex-1 hover:border-primary hover:text-primary transition-smooth"
+              className="flex-1 hover:border-producer-gold hover:text-producer-gold transition-smooth"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar

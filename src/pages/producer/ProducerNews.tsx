@@ -1,6 +1,6 @@
 import { Newspaper, Calendar, MapPin, Users, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import producerLogo from "@/assets/producer-logo.png";
+import logoProdutorArenaBRB from "@/assets/logo_produtor_ArenaBRB.svg";
 
 const ProducerNews = () => {
   const news = [
@@ -52,9 +52,8 @@ const ProducerNews = () => {
   return (
     <div className="min-h-screen producer-theme bg-producer-background text-producer-foreground animate-fade-in">
       <header className="bg-producer-surface/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-producer-card">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <img src={producerLogo} alt="Arena BRB Produtor" className="h-12 hover-producer-glow transition-smooth" />
-          <h1 className="text-xl font-bold gradient-producer-primary bg-clip-text text-transparent">Notícias</h1>
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
+          <img src={logoProdutorArenaBRB} alt="Arena BRB" className="h-12 hover-producer-glow transition-smooth" />
         </div>
       </header>
 
@@ -62,19 +61,19 @@ const ProducerNews = () => {
         {/* Destaque */}
         {featuredNews && (
           <div className="relative overflow-hidden rounded-3xl border border-border bg-producer-surface hover-producer-glow transition-smooth group">
-            <div className="absolute inset-0 gradient-producer-primary opacity-5" />
+            <div className="absolute inset-0 gradient-producer-accent opacity-5" />
             <div className="relative p-8">
               <div className="flex items-start gap-6">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm font-semibold">
+                    <span className="px-3 py-1 bg-producer-gold/20 text-producer-gold rounded-full text-sm font-semibold">
                       {featuredNews.category}
                     </span>
                     <span className="px-3 py-1 bg-producer-gold/20 text-producer-gold rounded-full text-sm font-semibold">
                       Destaque
                     </span>
                   </div>
-                  <h2 className="text-3xl font-bold mb-4 group-hover:text-primary transition-smooth">
+                  <h2 className="text-3xl font-bold mb-4 group-hover:text-producer-gold transition-smooth">
                     {featuredNews.title}
                   </h2>
                   <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
@@ -82,11 +81,11 @@ const ProducerNews = () => {
                   </p>
                   <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-primary" />
+                      <Calendar className="w-4 h-4 text-producer-gold" />
                       <span>{featuredNews.date}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-primary" />
+                      <TrendingUp className="w-4 h-4 text-producer-gold" />
                       <span>{featuredNews.readTime} de leitura</span>
                     </div>
                   </div>
@@ -109,10 +108,10 @@ const ProducerNews = () => {
         {/* Grid de Notícias */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-bold gradient-producer-primary bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold gradient-producer-accent bg-clip-text text-transparent">
               Últimas Notícias
             </h3>
-            <Button variant="outline" className="hover:border-primary hover:text-primary transition-smooth">
+            <Button variant="outline" className="hover:border-producer-gold hover:text-producer-gold transition-smooth">
               Ver Todas
             </Button>
           </div>
@@ -121,7 +120,7 @@ const ProducerNews = () => {
             {regularNews.map((newsItem) => (
               <article
                 key={newsItem.id}
-                className="bg-producer-surface rounded-2xl border border-border p-6 hover:border-primary hover-producer-glow transition-smooth group cursor-pointer"
+                className="bg-producer-surface rounded-2xl border border-border p-6 hover:border-producer-gold hover-producer-glow transition-smooth group cursor-pointer"
               >
                 <div className="w-full h-48 bg-producer-background rounded-xl border border-border mb-4 overflow-hidden">
                   <img 
@@ -132,13 +131,13 @@ const ProducerNews = () => {
                 </div>
                 
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm font-semibold">
+                  <span className="px-3 py-1 bg-producer-gold/20 text-producer-gold rounded-full text-sm font-semibold">
                     {newsItem.category}
                   </span>
                   <span className="text-sm text-muted-foreground">{newsItem.readTime}</span>
                 </div>
                 
-                <h4 className="text-xl font-bold mb-3 group-hover:text-primary transition-smooth line-clamp-2">
+                <h4 className="text-xl font-bold mb-3 group-hover:text-producer-gold transition-smooth line-clamp-2">
                   {newsItem.title}
                 </h4>
                 
@@ -148,10 +147,10 @@ const ProducerNews = () => {
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="w-4 h-4 text-primary" />
+                    <Calendar className="w-4 h-4 text-producer-gold" />
                     <span>{newsItem.date}</span>
                   </div>
-                  <Button variant="ghost" size="sm" className="hover:text-primary transition-smooth">
+                  <Button variant="ghost" size="sm" className="hover:text-producer-gold transition-smooth">
                     Ler
                   </Button>
                 </div>
@@ -163,8 +162,8 @@ const ProducerNews = () => {
         {/* Newsletter */}
         <div className="bg-producer-surface rounded-3xl border border-border p-8 text-center">
           <div className="relative inline-block mb-6">
-            <Newspaper className="w-16 h-16 text-primary mx-auto" />
-            <div className="absolute -inset-4 gradient-producer-primary blur-xl opacity-20 animate-pulse" />
+            <Newspaper className="w-16 h-16 text-producer-gold mx-auto" />
+            <div className="absolute -inset-4 gradient-producer-accent blur-xl opacity-20 animate-pulse" />
           </div>
           <h3 className="text-2xl font-bold mb-4">Mantenha-se Atualizado</h3>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto">

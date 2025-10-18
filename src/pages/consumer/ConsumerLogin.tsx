@@ -36,9 +36,8 @@ const ConsumerLogin = ({ onLogin, onSwitchToProducer }: ConsumerLoginProps) => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="seu@email.com"
+                  placeholder="seu@email.com (opcional)"
                   className="pl-10 transition-smooth focus:shadow-elegant"
-                  required
                 />
               </div>
             </div>
@@ -50,14 +49,13 @@ const ConsumerLogin = ({ onLogin, onSwitchToProducer }: ConsumerLoginProps) => {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="•••••••• (opcional)"
                   className="pl-10 transition-smooth focus:shadow-elegant"
-                  required
                 />
               </div>
             </div>
 
-            <Button type="submit" className="w-full gradient-primary hover:shadow-glow transition-smooth" size="lg">
+            <Button type="submit" className="w-full bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth text-white" size="lg">
               Entrar
             </Button>
           </form>
@@ -76,7 +74,7 @@ const ConsumerLogin = ({ onLogin, onSwitchToProducer }: ConsumerLoginProps) => {
       <footer className="p-6 text-center">
         <button
           onClick={onSwitchToProducer}
-          className="text-sm text-muted-foreground hover:text-primary transition-smooth font-medium"
+          className="text-sm text-muted-foreground hover:text-accent transition-smooth font-medium"
         >
           Você é um Produtor de Eventos? Acesse aqui
         </button>

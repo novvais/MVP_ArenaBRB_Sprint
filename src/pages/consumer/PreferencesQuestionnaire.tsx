@@ -68,7 +68,7 @@ const PreferencesQuestionnaire = ({ onComplete }: PreferencesQuestionnaireProps)
         <Button
           onClick={handleSubmit}
           disabled={selectedPreferences.length === 0}
-          className="w-full gradient-primary hover:shadow-glow transition-smooth disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth disabled:opacity-50 text-white"
           size="lg"
         >
           Continuar

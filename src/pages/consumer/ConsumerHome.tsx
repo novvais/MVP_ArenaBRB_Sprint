@@ -81,7 +81,7 @@ const ConsumerHome = () => {
         <section>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-foreground">Eventos em Destaque</h2>
-            <Button variant="outline" className="hover:border-primary hover:text-primary transition-smooth">
+            <Button variant="outline" className="hover:border-primary hover:text-accent transition-smooth">
               Ver Todos
             </Button>
           </div>
@@ -116,7 +116,7 @@ const ConsumerHome = () => {
                 
                 <div className="p-6 space-y-4">
                   <div className="flex items-start justify-between">
-                    <h3 className="font-bold text-2xl text-foreground group-hover:text-primary transition-smooth flex-1">
+                    <h3 className="font-bold text-2xl text-foreground group-hover:text-accent transition-smooth flex-1">
                       {event.title}
                     </h3>
                     <div className="flex items-center gap-1 ml-4">
@@ -142,7 +142,7 @@ const ConsumerHome = () => {
                   
                   <div className="flex items-center justify-between pt-4 border-t border-border">
                     <div className="text-lg font-bold text-foreground">{event.price}</div>
-                    <Button className="gradient-primary hover:shadow-glow transition-smooth font-bold">
+                    <Button className="bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth font-bold text-white">
                       Comprar Ingresso
                     </Button>
                   </div>
@@ -156,7 +156,7 @@ const ConsumerHome = () => {
         <section>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-foreground">Próximos Eventos</h2>
-            <Button variant="outline" className="hover:border-primary hover:text-primary transition-smooth">
+            <Button variant="outline" className="hover:border-primary hover:text-accent transition-smooth">
               Ver Todos
             </Button>
           </div>
@@ -182,7 +182,7 @@ const ConsumerHome = () => {
                 
                 <div className="p-5 space-y-3">
                   <div className="flex items-start justify-between">
-                    <h3 className="font-bold text-xl text-foreground group-hover:text-primary transition-smooth flex-1">
+                    <h3 className="font-bold text-xl text-foreground group-hover:text-accent transition-smooth flex-1">
                       {event.title}
                     </h3>
                     <div className="flex items-center gap-1 ml-2">
@@ -208,7 +208,7 @@ const ConsumerHome = () => {
                   
                   <div className="flex items-center justify-between pt-3 border-t border-border">
                     <span className="font-bold text-primary">{event.price}</span>
-                    <Button size="sm" className="gradient-primary hover:shadow-glow transition-smooth">
+                    <Button size="sm" className="bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth text-white">
                       Ver Detalhes
                     </Button>
                   </div>

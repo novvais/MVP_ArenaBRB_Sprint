@@ -48,11 +48,11 @@ const ConsumerTickets = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="bg-gradient-primary p-4 rounded-xl text-primary-foreground shadow-glow">
+              <div className="bg-gradient-primary p-4 rounded-xl text-black shadow-glow">
                 <p className="text-xs mb-1 font-semibold uppercase opacity-90">Portão</p>
                 <p className="font-bold text-2xl">Portão 3</p>
               </div>
-              <div className="bg-gradient-accent p-4 rounded-xl text-accent-foreground shadow-glow">
+              <div className="bg-gradient-accent p-4 rounded-xl text-black shadow-glow">
                 <p className="text-xs mb-1 font-semibold uppercase opacity-90">Assento</p>
                 <p className="font-bold text-2xl">A-125</p>
               </div>
@@ -68,7 +68,7 @@ const ConsumerTickets = () => {
               </div>
             </div>
 
-            <Button className="w-full gradient-primary hover:shadow-glow transition-smooth" size="lg">
+            <Button className="w-full bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth text-white" size="lg">
               Ver QR Code Completo
             </Button>
           </div>

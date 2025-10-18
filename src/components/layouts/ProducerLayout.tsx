@@ -10,7 +10,6 @@ interface ProducerLayoutProps {
 const ProducerLayout = ({ children, currentPage, onNavigate }: ProducerLayoutProps) => {
   const navItems = [
     { id: "dashboard", label: "Meus Eventos", icon: Calendar },
-    { id: "create-event", label: "Criar Evento", icon: Plus },
     { id: "calendar", label: "Calendário", icon: CalendarDays },
     { id: "news", label: "Notícias", icon: Newspaper },
     { id: "producer-profile", label: "Perfil", icon: User },

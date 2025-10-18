@@ -90,7 +90,7 @@ const Index = () => {
       case "dashboard":
         return (
           <ProducerLayout currentPage="dashboard" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
-            <ProducerDashboard />
+            <ProducerDashboard onNavigate={(page) => setCurrentScreen(page as AppScreen)} />
           </ProducerLayout>
         );
       case "create-event":
@@ -103,7 +103,7 @@ const Index = () => {
       case "calendar":
         return (
           <ProducerLayout currentPage="calendar" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
-            <ProducerCalendar />
+            <ProducerCalendar onNavigate={(page) => setCurrentScreen(page as AppScreen)} />
           </ProducerLayout>
         );
       case "news":

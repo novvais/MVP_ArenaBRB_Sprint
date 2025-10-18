@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock, ArrowLeft } from "lucide-react";
-import producerLogo from "@/assets/producer-logo.png";
+import logoProdutorArenaBRB from "@/assets/logo_produtor_ArenaBRB.svg";
 
 interface ProducerLoginProps {
   onLogin: () => void;
@@ -20,7 +20,7 @@ const ProducerLogin = ({ onLogin, onBackToConsumer }: ProducerLoginProps) => {
       <div className="p-4">
         <button
           onClick={onBackToConsumer}
-          className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-smooth group"
+          className="flex items-center gap-2 text-muted-foreground hover:text-producer-gold transition-smooth group"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-smooth" />
           <span className="text-sm font-medium">Voltar</span>
@@ -31,10 +31,9 @@ const ProducerLogin = ({ onLogin, onBackToConsumer }: ProducerLoginProps) => {
         <div className="w-full max-w-md space-y-8 animate-scale-in">
           <div className="text-center space-y-4">
             <div className="relative inline-block">
-              <img src={producerLogo} alt="Arena BRB Produtor" className="h-24 mx-auto hover-producer-glow transition-smooth" />
-              <div className="absolute -inset-4 gradient-producer-primary blur-2xl opacity-20 animate-pulse" />
+              <img src={logoProdutorArenaBRB} alt="Arena BRB" className="h-24 mx-auto hover-producer-glow transition-smooth" />
             </div>
-            <h1 className="text-4xl font-bold gradient-producer-primary bg-clip-text text-transparent">Portal do Produtor</h1>
+            <h1 className="text-4xl font-bold text-producer-gold">Portal do Produtor</h1>
             <p className="text-muted-foreground text-lg">Acesse sua conta profissional</p>
           </div>
 
@@ -42,13 +41,12 @@ const ProducerLogin = ({ onLogin, onBackToConsumer }: ProducerLoginProps) => {
             <div className="space-y-2">
               <Label htmlFor="producer-email" className="text-sm font-semibold">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
+                <Mail className="absolute left-3 top-3 h-5 w-5 text-producer-gold/70" />
                 <Input
                   id="producer-email"
                   type="email"
-                  placeholder="produtor@email.com"
-                  className="pl-10 bg-producer-surface border-border transition-smooth focus:border-primary focus:shadow-producer-glow"
-                  required
+                  placeholder="produtor@email.com (opcional)"
+                  className="pl-10 bg-producer-surface border-border transition-smooth focus:border-producer-gold focus:shadow-producer-glow"
                 />
               </div>
             </div>
@@ -56,13 +54,12 @@ const ProducerLogin = ({ onLogin, onBackToConsumer }: ProducerLoginProps) => {
             <div className="space-y-2">
               <Label htmlFor="producer-password" className="text-sm font-semibold">Senha</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
+                <Lock className="absolute left-3 top-3 h-5 w-5 text-producer-gold/70" />
                 <Input
                   id="producer-password"
                   type="password"
-                  placeholder="••••••••"
-                  className="pl-10 bg-producer-surface border-border transition-smooth focus:border-primary focus:shadow-producer-glow"
-                  required
+                  placeholder="•••••••• (opcional)"
+                  className="pl-10 bg-producer-surface border-border transition-smooth focus:border-producer-gold focus:shadow-producer-glow"
                 />
               </div>
             </div>
@@ -71,6 +68,15 @@ const ProducerLogin = ({ onLogin, onBackToConsumer }: ProducerLoginProps) => {
               Entrar como Produtor
             </Button>
           </form>
+
+          <div className="text-center space-y-4">
+            <button
+              onClick={onBackToConsumer}
+              className="text-producer-gold hover:text-accent transition-smooth text-sm font-semibold hover:underline"
+            >
+              Voltar para Área do Consumidor
+            </button>
+          </div>
         </div>
       </div>
     </div>

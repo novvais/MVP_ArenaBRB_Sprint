@@ -2,9 +2,13 @@ import { Calendar, MapPin, Users, TrendingUp, DollarSign, Eye, Plus, BarChart3, 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import producerLogo from "@/assets/producer-logo.png";
+import logoProdutorArenaBRB from "@/assets/logo_produtor_ArenaBRB.svg";
 
-const ProducerDashboard = () => {
+interface ProducerDashboardProps {
+  onNavigate?: (page: string) => void;
+}
+
+const ProducerDashboard = ({ onNavigate }: ProducerDashboardProps) => {
   const events = [
     {
       id: 1,
@@ -41,77 +45,26 @@ const ProducerDashboard = () => {
     },
   ];
 
-  const stats = [
-    {
-      title: "Total de Eventos",
-      value: "12",
-      change: "+2 este mês",
-      icon: Calendar,
-      color: "text-blue-500"
-    },
-    {
-      title: "Público Total",
-      value: "156K",
-      change: "+15% vs mês anterior",
-      icon: Users,
-      color: "text-green-500"
-    },
-    {
-      title: "Receita Total",
-      value: "R$ 2.1M",
-      change: "+23% vs mês anterior",
-      icon: DollarSign,
-      color: "text-yellow-500"
-    },
-    {
-      title: "Taxa de Conversão",
-      value: "8.4%",
-      change: "+1.2% vs mês anterior",
-      icon: TrendingUp,
-      color: "text-purple-500"
-    }
-  ];
 
   return (
     <div className="min-h-screen producer-theme bg-producer-background text-producer-foreground animate-fade-in">
       <header className="bg-producer-surface/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-producer-card">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <img src={producerLogo} alt="Arena BRB Produtor" className="h-12 hover-producer-glow transition-smooth" />
-          <h1 className="text-xl font-bold gradient-producer-primary bg-clip-text text-transparent">Meus Eventos</h1>
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
+          <img src={logoProdutorArenaBRB} alt="Arena BRB" className="h-12 hover-producer-glow transition-smooth" />
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto p-6 space-y-8">
-        {/* Estatísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={index} className="bg-producer-surface border-border p-6 hover-producer-glow transition-smooth">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-xl bg-producer-background border border-border ${stat.color}`}>
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <Badge variant="outline" className="text-xs text-green-400 border-green-400">
-                    {stat.change}
-                  </Badge>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold mb-1">{stat.value}</h3>
-                  <p className="text-sm text-muted-foreground">{stat.title}</p>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
-
         {/* Seção Principal */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Lista de Eventos */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Meus Eventos</h2>
-              <Button className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold">
+              <Button 
+                onClick={() => onNavigate?.("create-event")}
+                className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold"
+              >
                 <Plus className="w-4 h-4 mr-2" />
                 Novo Evento
               </Button>
@@ -120,14 +73,17 @@ const ProducerDashboard = () => {
             {events.length === 0 ? (
               <Card className="bg-producer-surface border-border p-12 text-center">
                 <div className="relative inline-block mb-6">
-                  <Calendar className="w-20 h-20 text-primary mx-auto" />
-                  <div className="absolute -inset-4 gradient-producer-primary blur-xl opacity-20 animate-pulse" />
+                  <Calendar className="w-20 h-20 text-producer-gold mx-auto" />
+                  <div className="absolute -inset-4 gradient-producer-accent blur-xl opacity-20 animate-pulse" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4">Nenhum evento criado</h3>
                 <p className="text-muted-foreground text-lg mb-6">
                   Comece criando seu primeiro evento no Arena BRB
                 </p>
-                <Button className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold">
+                <Button 
+                  onClick={() => onNavigate?.("create-event")}
+                  className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Criar Primeiro Evento
                 </Button>
@@ -142,30 +98,30 @@ const ProducerDashboard = () => {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl font-bold group-hover:text-primary transition-smooth">{event.title}</h3>
+                          <h3 className="text-xl font-bold group-hover:text-producer-gold transition-smooth">{event.title}</h3>
                           <Badge className={`${
-                            event.type === 'show' ? 'bg-primary' :
-                            event.type === 'sports' ? 'bg-blue-500' :
-                            'bg-green-500'
-                          } text-white text-xs`}>
+                            event.type === 'show' ? 'bg-producer-gold' :
+                            event.type === 'sports' ? 'bg-producer-gold' :
+                            'bg-producer-gold'
+                          } text-producer-gold-foreground text-xs`}>
                             {event.type === 'show' ? 'Show' : event.type === 'sports' ? 'Esporte' : 'Outro'}
                           </Badge>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground mb-4">
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-primary" />
+                            <Calendar className="w-4 h-4 text-producer-gold" />
                             <span>{event.date}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-primary" />
+                            <Users className="w-4 h-4 text-producer-gold" />
                             <span>{event.attendees.toLocaleString()}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <DollarSign className="w-4 h-4 text-primary" />
+                            <DollarSign className="w-4 h-4 text-producer-gold" />
                             <span>R$ {event.revenue.toLocaleString()}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Eye className="w-4 h-4 text-primary" />
+                            <Eye className="w-4 h-4 text-producer-gold" />
                             <span>{event.views.toLocaleString()}</span>
                           </div>
                         </div>
@@ -176,7 +132,7 @@ const ProducerDashboard = () => {
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <Button variant="outline" size="sm" className="hover:border-primary hover:text-primary transition-smooth">
+                      <Button variant="outline" size="sm" className="hover:border-producer-gold hover:text-producer-gold transition-smooth">
                         Ver Detalhes
                       </Button>
                       <Button
@@ -197,14 +153,14 @@ const ProducerDashboard = () => {
             {/* Próximos Eventos */}
             <Card className="bg-producer-surface border-border p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Clock className="w-5 h-5 text-primary" />
+                <Clock className="w-5 h-5 text-producer-gold" />
                 <h3 className="text-lg font-bold">Próximos Eventos</h3>
               </div>
               <div className="space-y-3">
                 {events.slice(0, 3).map((event) => (
                   <div key={event.id} className="flex items-center gap-3 p-3 bg-producer-background rounded-lg border border-border">
-                    <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 bg-producer-gold/20 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-producer-gold" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-sm">{event.title}</h4>
@@ -221,25 +177,21 @@ const ProducerDashboard = () => {
             {/* Resumo de Performance */}
             <Card className="bg-producer-surface border-border p-6">
               <div className="flex items-center gap-2 mb-4">
-                <BarChart3 className="w-5 h-5 text-primary" />
+                <BarChart3 className="w-5 h-5 text-producer-gold" />
                 <h3 className="text-lg font-bold">Performance</h3>
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Total de Eventos</span>
+                  <span className="font-bold text-blue-500">12</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Público Total</span>
+                  <span className="font-bold text-green-500">156K</span>
+                </div>
+                <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Taxa de Ocupação</span>
                   <span className="font-bold text-green-400">87%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Vendas Online</span>
-                  <span className="font-bold text-primary">R$ 1.2M</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Novos Clientes</span>
-                  <span className="font-bold text-blue-400">+340</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Satisfação</span>
-                  <span className="font-bold text-yellow-400">4.8★</span>
                 </div>
               </div>
             </Card>

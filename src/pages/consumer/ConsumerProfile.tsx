@@ -36,7 +36,7 @@ const ConsumerProfile = ({ onNavigateToUserData, onSwitchToProducer }: ConsumerP
             className="w-full flex items-center justify-between p-5 bg-card border border-border rounded-2xl hover:border-primary hover-lift transition-smooth group shadow-card"
           >
             <span className="font-bold text-foreground text-lg">Meus Dados</span>
-            <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-smooth" />
+            <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-smooth" />
           </button>
 
           <button

@@ -18,13 +18,13 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Consumer Primary - Vibrant Purple */
-    --primary: 262 83% 58%;
+    /* Consumer Primary - Blue */
+    --primary: 198 100% 43%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 270 100% 70%;
+    --primary-glow: 198 100% 50%;
 
-    /* Consumer Accent - Pink */
-    --accent: 340 82% 52%;
+    /* Consumer Accent - Dark Blue */
+    --accent: 214 100% 26%;
     --accent-foreground: 0 0% 100%;
 
     /* Producer Dark Theme */
@@ -51,13 +51,13 @@ All colors MUST be HSL.
 
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 262 83% 58%;
+    --ring: 198 100% 43%;
 
     --radius: 1rem;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(270 100% 70%));
-    --gradient-accent: linear-gradient(135deg, hsl(340 82% 52%), hsl(270 100% 70%));
+    --gradient-primary: linear-gradient(135deg, hsl(198 100% 43%), hsl(198 100% 50%));
+    --gradient-accent: linear-gradient(135deg, hsl(214 100% 26%), hsl(198 100% 43%));
     --gradient-subtle: linear-gradient(180deg, hsl(210 20% 98%), hsl(210 40% 96%));
     
     /* Producer Gradients */
@@ -65,8 +65,8 @@ All colors MUST be HSL.
     --gradient-producer-accent: linear-gradient(135deg, hsl(45 93% 58%), hsl(35 93% 55%));
 
     /* Shadows */
-    --shadow-elegant: 0 10px 30px -10px hsl(262 83% 58% / 0.3);
-    --shadow-glow: 0 0 40px hsl(270 100% 70% / 0.4);
+    --shadow-elegant: 0 10px 30px -10px hsl(198 100% 43% / 0.3);
+    --shadow-glow: 0 0 40px hsl(198 100% 50% / 0.4);
     --shadow-card: 0 4px 20px -4px hsl(222 47% 11% / 0.1);
     
     /* Producer Shadows */

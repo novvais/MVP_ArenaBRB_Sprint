@@ -6,12 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Calendar as CalendarIcon, Clock, MapPin, Users, Plus } from "lucide-react";
-import producerLogo from "@/assets/producer-logo.png";
+import logoProdutorArenaBRB from "@/assets/logo_produtor_ArenaBRB.svg";
 import "react-calendar/dist/Calendar.css";
 
 type Value = Date | [Date, Date] | null;
 
-const ProducerCalendar = () => {
+interface ProducerCalendarProps {
+  onNavigate?: (page: string) => void;
+}
+
+const ProducerCalendar = ({ onNavigate }: ProducerCalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Value>(new Date());
   const [view, setView] = useState<'calendar' | 'list'>('calendar');
 
@@ -81,7 +85,7 @@ const ProducerCalendar = () => {
               <div
                 key={index}
                 className={`w-2 h-2 rounded-full mb-1 ${
-                  event.type === 'show' ? 'bg-primary' :
+                  event.type === 'show' ? 'bg-producer-gold' :
                   event.type === 'sports' ? 'bg-blue-500' :
                   event.type === 'workshop' ? 'bg-green-500' : 'bg-gray-500'
                 }`}
@@ -99,10 +103,10 @@ const ProducerCalendar = () => {
 
   const getEventTypeColor = (type: string) => {
     switch (type) {
-      case 'show': return 'bg-primary';
-      case 'sports': return 'bg-blue-500';
-      case 'workshop': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      case 'show': return 'bg-producer-gold';
+      case 'sports': return 'bg-producer-gold';
+      case 'workshop': return 'bg-producer-gold';
+      default: return 'bg-producer-gold';
     }
   };
 
@@ -118,28 +122,8 @@ const ProducerCalendar = () => {
   return (
     <div className="min-h-screen producer-theme bg-producer-background text-producer-foreground animate-fade-in">
       <header className="bg-producer-surface/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-producer-card">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <img src={producerLogo} alt="Arena BRB Produtor" className="h-12 hover-producer-glow transition-smooth" />
-          <h1 className="text-xl font-bold gradient-producer-primary bg-clip-text text-transparent">Calendário de Eventos</h1>
-          <div className="flex gap-2">
-            <Button
-              variant={view === 'calendar' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setView('calendar')}
-              className="hover:border-primary hover:text-primary transition-smooth"
-            >
-              <CalendarIcon className="w-4 h-4 mr-2" />
-              Calendário
-            </Button>
-            <Button
-              variant={view === 'list' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setView('list')}
-              className="hover:border-primary hover:text-primary transition-smooth"
-            >
-              Lista
-            </Button>
-          </div>
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
+          <img src={logoProdutorArenaBRB} alt="Arena BRB" className="h-12 hover-producer-glow transition-smooth" />
         </div>
       </header>
 
@@ -151,7 +135,10 @@ const ProducerCalendar = () => {
               <Card className="bg-producer-surface border-border p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-2xl font-bold">Calendário</h2>
-                  <Button className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold">
+                  <Button 
+                    onClick={() => onNavigate?.("create-event")}
+                    className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Novo Evento
                   </Button>
@@ -177,25 +164,25 @@ const ProducerCalendar = () => {
                     {getEventsForSelectedDate().map((event) => (
                       <div
                         key={event.id}
-                        className="bg-producer-background rounded-xl border border-border p-4 hover:border-primary transition-smooth"
+                        className="bg-producer-background rounded-xl border border-border p-4 hover:border-producer-gold transition-smooth"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <h4 className="font-bold text-lg">{event.title}</h4>
-                          <Badge className={`${getEventTypeColor(event.type)} text-white`}>
+                          <Badge className={`${getEventTypeColor(event.type)} text-producer-gold-foreground`}>
                             {getEventTypeLabel(event.type)}
                           </Badge>
                         </div>
                         <div className="space-y-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-primary" />
+                            <Clock className="w-4 h-4 text-producer-gold" />
                             <span>{event.time}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-primary" />
+                            <MapPin className="w-4 h-4 text-producer-gold" />
                             <span>{event.location}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-primary" />
+                            <Users className="w-4 h-4 text-producer-gold" />
                             <span>{event.attendees.toLocaleString()} pessoas</span>
                           </div>
                         </div>
@@ -220,7 +207,7 @@ const ProducerCalendar = () => {
                 <h3 className="text-lg font-bold mb-4">Legenda</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-primary rounded-full"></div>
+                    <div className="w-3 h-3 bg-producer-gold rounded-full"></div>
                     <span className="text-sm">Shows e Música</span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -240,7 +227,10 @@ const ProducerCalendar = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Todos os Eventos</h2>
-              <Button className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold">
+              <Button 
+                onClick={() => onNavigate?.("create-event")}
+                className="gradient-producer-accent hover:shadow-producer-glow transition-smooth font-bold"
+              >
                 <Plus className="w-4 h-4 mr-2" />
                 Novo Evento
               </Button>
@@ -250,30 +240,30 @@ const ProducerCalendar = () => {
               {events.map((event) => (
                 <Card
                   key={event.id}
-                  className="bg-producer-surface border-border p-6 hover:border-primary hover-producer-glow transition-smooth group"
+                  className="bg-producer-surface border-border p-6 hover:border-producer-gold hover-producer-glow transition-smooth group"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-xl font-bold group-hover:text-primary transition-smooth">{event.title}</h3>
-                    <Badge className={`${getEventTypeColor(event.type)} text-white`}>
+                    <h3 className="text-xl font-bold group-hover:text-producer-gold transition-smooth">{event.title}</h3>
+                    <Badge className={`${getEventTypeColor(event.type)} text-producer-gold-foreground`}>
                       {getEventTypeLabel(event.type)}
                     </Badge>
                   </div>
                   
                   <div className="space-y-3 text-sm text-muted-foreground mb-4">
                     <div className="flex items-center gap-2">
-                      <CalendarIcon className="w-4 h-4 text-primary" />
+                      <CalendarIcon className="w-4 h-4 text-producer-gold" />
                       <span>{format(event.date, "dd/MM/yyyy", { locale: ptBR })}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-primary" />
+                      <Clock className="w-4 h-4 text-producer-gold" />
                       <span>{event.time}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-primary" />
+                      <MapPin className="w-4 h-4 text-producer-gold" />
                       <span>{event.location}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-primary" />
+                      <Users className="w-4 h-4 text-producer-gold" />
                       <span>{event.attendees.toLocaleString()} pessoas</span>
                     </div>
                   </div>
@@ -282,7 +272,7 @@ const ProducerCalendar = () => {
                     <Badge variant="outline" className="text-xs">
                       {event.status}
                     </Badge>
-                    <Button variant="outline" size="sm" className="hover:border-primary hover:text-primary transition-smooth">
+                    <Button variant="outline" size="sm" className="hover:border-producer-gold hover:text-producer-gold transition-smooth">
                       Ver Detalhes
                     </Button>
                   </div>

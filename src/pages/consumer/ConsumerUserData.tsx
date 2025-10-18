@@ -18,7 +18,7 @@ const ConsumerUserData = ({ onBack }: ConsumerUserDataProps) => {
     <div className="min-h-screen bg-background">
       <header className="bg-card border-b border-border p-4 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <button onClick={onBack} className="text-foreground hover:text-primary">
+          <button onClick={onBack} className="text-foreground hover:text-accent">
             <ArrowLeft className="w-6 h-6" />
           </button>
           <img src={brbLogo} alt="Arena BRB" className="h-12" />
@@ -75,7 +75,7 @@ const ConsumerUserData = ({ onBack }: ConsumerUserDataProps) => {
             <Button type="button" variant="outline" onClick={onBack} className="flex-1">
               Cancelar
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth text-white">
               Salvar Alterações
             </Button>
           </div>
