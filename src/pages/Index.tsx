@@ -71,6 +71,7 @@ const Index = () => {
             <ConsumerProfile
               onNavigateToUserData={() => setCurrentScreen("user-data")}
               onSwitchToProducer={() => setCurrentScreen("producer-login")}
+              onLogout={() => setCurrentScreen("consumer-login")}
             />
           </ConsumerLayout>
         );
@@ -115,7 +116,10 @@ const Index = () => {
       case "producer-profile":
         return (
           <ProducerLayout currentPage="producer-profile" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
-            <ProducerProfile onSwitchToConsumer={() => setCurrentScreen("profile")} />
+            <ProducerProfile 
+              onSwitchToConsumer={() => setCurrentScreen("profile")} 
+              onLogout={() => setCurrentScreen("producer-login")}
+            />
           </ProducerLayout>
         );
 

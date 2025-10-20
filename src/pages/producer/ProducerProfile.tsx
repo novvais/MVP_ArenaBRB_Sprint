@@ -4,9 +4,10 @@ import logoProdutorArenaBRB from "@/assets/logo_produtor_ArenaBRB.svg";
 
 interface ProducerProfileProps {
   onSwitchToConsumer: () => void;
+  onLogout: () => void;
 }
 
-const ProducerProfile = ({ onSwitchToConsumer }: ProducerProfileProps) => {
+const ProducerProfile = ({ onSwitchToConsumer, onLogout }: ProducerProfileProps) => {
   return (
     <div className="min-h-screen producer-theme bg-producer-background text-producer-foreground animate-fade-in">
       <header className="bg-producer-surface/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-producer-card">
@@ -51,7 +52,11 @@ const ProducerProfile = ({ onSwitchToConsumer }: ProducerProfileProps) => {
         </div>
 
         <div className="pt-8">
-          <Button variant="outline" className="w-full hover:border-producer-gold hover:text-producer-gold transition-smooth">
+          <Button 
+            variant="outline" 
+            onClick={onLogout}
+            className="w-full hover:border-producer-gold hover:text-producer-gold transition-smooth"
+          >
             <LogOut className="w-4 h-4 mr-2" />
             Sair
           </Button>

@@ -1,18 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { User, ArrowRight, LogOut } from "lucide-react";
-import brbLogo from "@/assets/brb-logo.png";
+import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 
 interface ConsumerProfileProps {
   onNavigateToUserData: () => void;
   onSwitchToProducer: () => void;
+  onLogout: () => void;
 }
 
-const ConsumerProfile = ({ onNavigateToUserData, onSwitchToProducer }: ConsumerProfileProps) => {
+const ConsumerProfile = ({ onNavigateToUserData, onSwitchToProducer, onLogout }: ConsumerProfileProps) => {
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-card/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-card">
         <div className="max-w-6xl mx-auto flex items-center justify-center">
-          <img src={brbLogo} alt="Arena BRB" className="h-12 hover-lift" />
+          <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-12 hover-lift" />
         </div>
       </header>
 
@@ -51,6 +52,7 @@ const ConsumerProfile = ({ onNavigateToUserData, onSwitchToProducer }: ConsumerP
         <div className="pt-8">
           <Button 
             variant="outline" 
+            onClick={onLogout}
             className="w-full border-red-200 text-red-600 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-smooth font-medium"
           >
             <LogOut className="w-4 h-4 mr-2" />

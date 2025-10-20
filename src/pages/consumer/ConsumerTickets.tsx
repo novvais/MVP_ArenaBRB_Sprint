@@ -1,17 +1,13 @@
 import { QrCode, MapPin, Calendar, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import brbLogo from "@/assets/brb-logo.png";
+import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 
 const ConsumerTickets = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-card border-b border-border p-4 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <img src={brbLogo} alt="Arena BRB" className="h-12" />
-          <Button variant="outline" size="sm">
-            <Plus className="w-4 h-4 mr-2" />
-            Adicionar Ingresso
-          </Button>
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
+          <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-12" />
         </div>
       </header>
 

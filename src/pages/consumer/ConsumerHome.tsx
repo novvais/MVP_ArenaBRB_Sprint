@@ -1,7 +1,7 @@
 import { Calendar, MapPin, Star, TrendingUp, Users, Heart, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import brbLogo from "@/assets/brb-logo.png";
+import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 
 const ConsumerHome = () => {
   const featuredEvents = [
@@ -70,9 +70,8 @@ const ConsumerHome = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-card/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-card">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <img src={brbLogo} alt="Arena BRB" className="h-12 hover-lift" />
-          <h1 className="text-xl font-bold gradient-primary bg-clip-text text-transparent">Arena BRB</h1>
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
+          <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-12 hover-lift" />
         </div>
       </header>
 

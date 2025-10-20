@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock } from "lucide-react";
-import brbLogo from "@/assets/brb-logo.png";
+import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 
 interface ConsumerLoginProps {
   onLogin: () => void;
@@ -21,8 +21,7 @@ const ConsumerLogin = ({ onLogin, onSwitchToProducer }: ConsumerLoginProps) => {
         <div className="w-full max-w-md space-y-8 animate-scale-in">
           <div className="text-center space-y-4">
             <div className="relative inline-block">
-              <img src={brbLogo} alt="Arena BRB" className="h-24 mx-auto hover-glow" />
-              <div className="absolute -inset-2 gradient-primary blur-xl opacity-30 animate-pulse" />
+              <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-32 mx-auto hover-glow" />
             </div>
             <h1 className="text-4xl font-bold text-foreground">Bem-vindo</h1>
             <p className="text-muted-foreground text-lg">Acesse sua conta para continuar</p>

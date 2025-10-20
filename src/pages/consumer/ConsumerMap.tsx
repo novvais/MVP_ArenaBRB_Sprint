@@ -1,12 +1,11 @@
-import brbLogo from "@/assets/brb-logo.png";
+import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 
 const ConsumerMap = () => {
   return (
     <div className="h-screen flex flex-col bg-background">
       <header className="bg-card border-b border-border p-4 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <img src={brbLogo} alt="Arena BRB" className="h-12" />
-          <h1 className="text-xl font-bold text-foreground">Localização</h1>
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
+          <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-12" />
         </div>
       </header>
 

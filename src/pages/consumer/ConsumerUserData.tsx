@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
-import brbLogo from "@/assets/brb-logo.png";
+import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 
 interface ConsumerUserDataProps {
   onBack: () => void;
@@ -17,11 +17,8 @@ const ConsumerUserData = ({ onBack }: ConsumerUserDataProps) => {
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-card border-b border-border p-4 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <button onClick={onBack} className="text-foreground hover:text-accent">
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <img src={brbLogo} alt="Arena BRB" className="h-12" />
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
+          <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-12" />
         </div>
       </header>
 

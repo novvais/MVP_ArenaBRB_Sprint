@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { useState } from "react";
-import producerLogo from "@/assets/producer-logo.png";
+import logoProdutorArenaBRB from "@/assets/logo_produtor_ArenaBRB.svg";
 
 interface ProducerCreateEventProps {
   onComplete: () => void;
@@ -46,7 +46,7 @@ const ProducerCreateEvent = ({ onComplete, onBack }: ProducerCreateEventProps) =
           <button onClick={handlePrevious} className="text-producer-foreground hover:text-producer-gold transition-smooth group">
             <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-smooth" />
           </button>
-          <img src={producerLogo} alt="Arena BRB Produtor" className="h-12 hover-producer-glow transition-smooth" />
+          <img src={logoProdutorArenaBRB} alt="Arena BRB Produtor" className="h-12 hover-producer-glow transition-smooth" />
         </div>
       </header>
 
