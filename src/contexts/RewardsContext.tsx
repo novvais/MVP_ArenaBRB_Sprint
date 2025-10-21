@@ -52,10 +52,7 @@ const USER_LEVELS: UserLevel[] = [
     name: "Bronze",
     minPoints: 0,
     maxPoints: 499,
-    benefits: [
-      "Acesso a eventos básicos",
-      "5% de desconto em ingressos",
-    ],
+    benefits: ["Acesso a eventos básicos", "5% de desconto em ingressos"],
   },
   {
     name: "Prata",
@@ -161,29 +158,55 @@ export const RewardsProvider = ({ children }: { children: ReactNode }) => {
   const [tickets, setTickets] = useState<Ticket[]>([
     {
       id: 1,
-      event: "Rock in Rio 2025",
+      event: "Guns N' Roses",
       venue: "Arena BRB Mané Garrincha",
       address: "SRPN - Brasília, DF",
-      date: "15 Jun, 2025",
+      date: "2 Nov, 2025",
       time: "20:00",
       gate: "Portão 3",
       seat: "A-125",
       code: "TKT-12345",
       status: "Válido",
-      pointsEarned: 150,
+      pointsEarned: 200,
     },
     {
       id: 2,
-      event: "Festival Gastronômico",
+      event: "Linkin Park",
       venue: "Arena BRB Mané Garrincha",
       address: "SRPN - Brasília, DF",
-      date: "22 Jan, 2025",
-      time: "12:00",
+      date: "11 Nov, 2025",
+      time: "21:00",
       gate: "Portão 2",
       seat: "B-87",
       code: "TKT-67890",
       status: "Válido",
-      pointsEarned: 100,
+      pointsEarned: 250,
+    },
+    {
+      id: 3,
+      event: "Sorriso as Antigas",
+      venue: "Arena BRB Mané Garrincha",
+      address: "SRPN - Brasília, DF",
+      date: "6 Dez, 2025",
+      time: "19:00",
+      gate: "Portão 1",
+      seat: "C-45",
+      code: "TKT-13579",
+      status: "Válido",
+      pointsEarned: 120,
+    },
+    {
+      id: 4,
+      event: "Basquete Paysandu",
+      venue: "Arena BRB Nilson Nelson",
+      address: "SCS - Brasília, DF",
+      date: "17 Nov, 2025",
+      time: "18:00",
+      gate: "Portão A",
+      seat: "D-23",
+      code: "TKT-24680",
+      status: "Válido",
+      pointsEarned: 80,
     },
   ]);
   const [rewards, setRewards] = useState<Reward[]>(INITIAL_REWARDS);
@@ -192,7 +215,7 @@ export const RewardsProvider = ({ children }: { children: ReactNode }) => {
   const getCurrentLevel = (): UserLevel => {
     return (
       userLevels.find(
-        (level) => points >= level.minPoints && points <= level.maxPoints
+        (level) => points >= level.minPoints && points <= level.maxPoints,
       ) || userLevels[0]
     );
   };
@@ -200,7 +223,7 @@ export const RewardsProvider = ({ children }: { children: ReactNode }) => {
   const getNextLevel = (): UserLevel | null => {
     const currentLevel = getCurrentLevel();
     const currentIndex = userLevels.findIndex(
-      (level) => level.name === currentLevel.name
+      (level) => level.name === currentLevel.name,
     );
     return currentIndex < userLevels.length - 1
       ? userLevels[currentIndex + 1]

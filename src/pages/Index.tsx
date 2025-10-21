@@ -4,7 +4,9 @@ import ProducerLayout from "@/components/layouts/ProducerLayout";
 import ConsumerLogin from "./consumer/ConsumerLogin";
 import PreferencesQuestionnaire from "./consumer/PreferencesQuestionnaire";
 import ConsumerHome from "./consumer/ConsumerHome";
+import ConsumerEventDetails from "./consumer/ConsumerEventDetails";
 import ConsumerTickets from "./consumer/ConsumerTickets";
+import ConsumerFood from "./consumer/ConsumerFood";
 import ConsumerMap from "./consumer/ConsumerMap";
 import ConsumerProfile from "./consumer/ConsumerProfile";
 import ConsumerUserData from "./consumer/ConsumerUserData";
@@ -19,7 +21,9 @@ type AppScreen =
   | "consumer-login"
   | "preferences"
   | "home"
+  | "event-details"
   | "tickets"
+  | "food"
   | "map"
   | "profile"
   | "user-data"
@@ -31,7 +35,9 @@ type AppScreen =
   | "producer-profile";
 
 const Index = () => {
-  const [currentScreen, setCurrentScreen] = useState<AppScreen>("consumer-login");
+  const [currentScreen, setCurrentScreen] =
+    useState<AppScreen>("consumer-login");
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -44,30 +50,67 @@ const Index = () => {
           />
         );
       case "preferences":
-        return <PreferencesQuestionnaire onComplete={() => setCurrentScreen("home")} />;
+        return (
+          <PreferencesQuestionnaire
+            onComplete={() => setCurrentScreen("home")}
+          />
+        );
 
       // Consumer Main App
       case "home":
         return (
-          <ConsumerLayout currentPage="home" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
-            <ConsumerHome />
+          <ConsumerLayout
+            currentPage="home"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
+            <ConsumerHome
+              onViewEventDetails={(eventId) => {
+                setSelectedEventId(eventId);
+                setCurrentScreen("event-details");
+              }}
+            />
           </ConsumerLayout>
+        );
+      case "event-details":
+        return (
+          <ConsumerEventDetails
+            eventId={selectedEventId}
+            onBack={() => setCurrentScreen("home")}
+          />
         );
       case "tickets":
         return (
-          <ConsumerLayout currentPage="tickets" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
+          <ConsumerLayout
+            currentPage="tickets"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
             <ConsumerTickets />
+          </ConsumerLayout>
+        );
+      case "food":
+        return (
+          <ConsumerLayout
+            currentPage="food"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
+            <ConsumerFood />
           </ConsumerLayout>
         );
       case "map":
         return (
-          <ConsumerLayout currentPage="map" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
+          <ConsumerLayout
+            currentPage="map"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
             <ConsumerMap />
           </ConsumerLayout>
         );
       case "profile":
         return (
-          <ConsumerLayout currentPage="profile" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
+          <ConsumerLayout
+            currentPage="profile"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
             <ConsumerProfile
               onNavigateToUserData={() => setCurrentScreen("user-data")}
               onSwitchToProducer={() => setCurrentScreen("producer-login")}
@@ -90,8 +133,13 @@ const Index = () => {
       // Producer Main App
       case "dashboard":
         return (
-          <ProducerLayout currentPage="dashboard" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
-            <ProducerDashboard onNavigate={(page) => setCurrentScreen(page as AppScreen)} />
+          <ProducerLayout
+            currentPage="dashboard"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
+            <ProducerDashboard
+              onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+            />
           </ProducerLayout>
         );
       case "create-event":
@@ -103,28 +151,44 @@ const Index = () => {
         );
       case "calendar":
         return (
-          <ProducerLayout currentPage="calendar" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
-            <ProducerCalendar onNavigate={(page) => setCurrentScreen(page as AppScreen)} />
+          <ProducerLayout
+            currentPage="calendar"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
+            <ProducerCalendar
+              onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+            />
           </ProducerLayout>
         );
       case "news":
         return (
-          <ProducerLayout currentPage="news" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
+          <ProducerLayout
+            currentPage="news"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
             <ProducerNews />
           </ProducerLayout>
         );
       case "producer-profile":
         return (
-          <ProducerLayout currentPage="producer-profile" onNavigate={(page) => setCurrentScreen(page as AppScreen)}>
-            <ProducerProfile 
-              onSwitchToConsumer={() => setCurrentScreen("profile")} 
+          <ProducerLayout
+            currentPage="producer-profile"
+            onNavigate={(page) => setCurrentScreen(page as AppScreen)}
+          >
+            <ProducerProfile
+              onSwitchToConsumer={() => setCurrentScreen("profile")}
               onLogout={() => setCurrentScreen("producer-login")}
             />
           </ProducerLayout>
         );
 
       default:
-        return <ConsumerLogin onLogin={() => setCurrentScreen("preferences")} onSwitchToProducer={() => setCurrentScreen("producer-login")} />;
+        return (
+          <ConsumerLogin
+            onLogin={() => setCurrentScreen("preferences")}
+            onSwitchToProducer={() => setCurrentScreen("producer-login")}
+          />
+        );
     }
   };
 

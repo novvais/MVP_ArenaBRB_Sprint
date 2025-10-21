@@ -1,4 +1,4 @@
-import { Home, Wallet, Map, User } from "lucide-react";
+import { Home, Wallet, Map, User, UtensilsCrossed } from "lucide-react";
 import { ReactNode } from "react";
 
 interface ConsumerLayoutProps {
@@ -15,6 +15,7 @@ const ConsumerLayout = ({
   const navItems = [
     { id: "home", label: "Início", icon: Home },
     { id: "tickets", label: "Carteira", icon: Wallet },
+    { id: "food", label: "F&B", icon: UtensilsCrossed },
     { id: "map", label: "Mapa", icon: Map },
     { id: "profile", label: "Perfil", icon: User },
   ];

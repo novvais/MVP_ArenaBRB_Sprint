@@ -1,32 +1,48 @@
-import { Calendar, MapPin, Star, TrendingUp, Users, Heart, Share2 } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Star,
+  TrendingUp,
+  Users,
+  Heart,
+  Share2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
+import gunsNRosesImg from "@/assets/Gunsnroses.jpeg";
+import linkinParkImg from "@/assets/linkinpark.jpg";
+import sorrisoImg from "@/assets/sorriso.jpg";
+import paysanduImg from "@/assets/ESCUDO-OFICIAL-PAYSANDU.png";
 
-const ConsumerHome = () => {
+interface ConsumerHomeProps {
+  onViewEventDetails?: (eventId: number) => void;
+}
+
+const ConsumerHome = ({ onViewEventDetails }: ConsumerHomeProps) => {
   const featuredEvents = [
     {
       id: 1,
-      title: "Rock in Rio 2025",
-      date: "15 de Junho, 2025",
+      title: "Guns N' Roses",
+      date: "2 de Novembro, 2025",
       location: "Arena BRB Mané Garrincha",
-      image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800",
+      image: gunsNRosesImg,
       category: "Show",
-      price: "A partir de R$ 180",
-      rating: 4.8,
+      price: "A partir de R$ 280",
+      rating: 4.9,
       attendees: 85000,
       featured: true,
     },
     {
       id: 2,
-      title: "Flamengo vs Corinthians",
-      date: "22 de Junho, 2025",
+      title: "Linkin Park",
+      date: "11 de Novembro, 2025",
       location: "Arena BRB Mané Garrincha",
-      image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800",
-      category: "Futebol",
-      price: "A partir de R$ 120",
+      image: linkinParkImg,
+      category: "Show",
+      price: "A partir de R$ 350",
       rating: 4.9,
-      attendees: 72000,
+      attendees: 90000,
       featured: true,
     },
   ];
@@ -34,36 +50,25 @@ const ConsumerHome = () => {
   const upcomingEvents = [
     {
       id: 3,
-      title: "Festival de Música Eletrônica",
-      date: "30 de Junho, 2025",
+      title: "Sorriso as Antigas",
+      date: "6 de Dezembro, 2025",
       location: "Arena BRB Mané Garrincha",
-      image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800",
-      category: "Festival",
-      price: "A partir de R$ 200",
+      image: sorrisoImg,
+      category: "Show",
+      price: "A partir de R$ 120",
       rating: 4.7,
       attendees: 45000,
     },
     {
       id: 4,
-      title: "Show de Sertanejo",
-      date: "5 de Julho, 2025",
-      location: "Arena BRB Mané Garrincha",
-      image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800",
-      category: "Show",
-      price: "A partir de R$ 150",
-      rating: 4.6,
-      attendees: 65000,
-    },
-    {
-      id: 5,
-      title: "Campeonato de MMA",
-      date: "12 de Julho, 2025",
-      location: "Arena BRB Mané Garrincha",
-      image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800",
+      title: "Basquete Paysandu",
+      date: "17 de Novembro, 2025",
+      location: "Arena BRB Nilson Nelson",
+      image: paysanduImg,
       category: "Esporte",
-      price: "A partir de R$ 90",
-      rating: 4.5,
-      attendees: 18000,
+      price: "A partir de R$ 50",
+      rating: 4.6,
+      attendees: 8000,
     },
   ];
 
@@ -71,7 +76,11 @@ const ConsumerHome = () => {
     <div className="min-h-screen bg-background">
       <header className="bg-card/80 backdrop-blur-lg border-b border-border p-4 sticky top-0 z-10 shadow-card">
         <div className="max-w-6xl mx-auto flex items-center justify-center">
-          <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-12 hover-lift" />
+          <img
+            src={logoConsumidorArenaBRB}
+            alt="Arena BRB"
+            className="h-12 hover-lift"
+          />
         </div>
       </header>
 
@@ -79,8 +88,13 @@ const ConsumerHome = () => {
         {/* Eventos em Destaque */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">Eventos em Destaque</h2>
-            <Button variant="outline" className="hover:border-primary hover:text-accent transition-smooth">
+            <h2 className="text-3xl font-bold text-foreground">
+              Eventos em Destaque
+            </h2>
+            <Button
+              variant="outline"
+              className="hover:border-primary hover:text-accent transition-smooth"
+            >
               Ver Todos
             </Button>
           </div>
@@ -98,7 +112,7 @@ const ConsumerHome = () => {
                     <Share2 className="w-4 h-4 text-white" />
                   </button>
                 </div>
-                
+
                 <div className="relative overflow-hidden h-64">
                   <img
                     src={event.image}
@@ -112,7 +126,7 @@ const ConsumerHome = () => {
                     </Badge>
                   </div>
                 </div>
-                
+
                 <div className="p-6 space-y-4">
                   <div className="flex items-start justify-between">
                     <h3 className="font-bold text-2xl text-foreground group-hover:text-accent transition-smooth flex-1">
@@ -120,10 +134,12 @@ const ConsumerHome = () => {
                     </h3>
                     <div className="flex items-center gap-1 ml-4">
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-semibold">{event.rating}</span>
+                      <span className="text-sm font-semibold">
+                        {event.rating}
+                      </span>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-3 text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-primary" />
@@ -135,13 +151,32 @@ const ConsumerHome = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-primary" />
-                      <span>{event.attendees.toLocaleString()} pessoas esperadas</span>
+                      <span>
+                        {event.attendees.toLocaleString()} pessoas esperadas
+                      </span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <div className="text-lg font-bold text-foreground">{event.price}</div>
-                    <Button className="bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth font-bold text-white">
+                    <div className="text-lg font-bold text-foreground">
+                      {event.price}
+                    </div>
+                    <Button
+                      className="bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth font-bold text-white"
+                      onClick={() => {
+                        if (event.id === 1) {
+                          window.open(
+                            "https://www.eventim.com.br/event/guns-n-roses-arena-brb-mane-garrincha-20345413/",
+                            "_blank",
+                          );
+                        } else if (event.id === 2) {
+                          window.open(
+                            "https://www.ticketmaster.com.br/event/venda-geral-linkin-park-brasilia",
+                            "_blank",
+                          );
+                        }
+                      }}
+                    >
                       Comprar Ingresso
                     </Button>
                   </div>
@@ -154,8 +189,13 @@ const ConsumerHome = () => {
         {/* Próximos Eventos */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">Próximos Eventos</h2>
-            <Button variant="outline" className="hover:border-primary hover:text-accent transition-smooth">
+            <h2 className="text-3xl font-bold text-foreground">
+              Próximos Eventos
+            </h2>
+            <Button
+              variant="outline"
+              className="hover:border-primary hover:text-accent transition-smooth"
+            >
               Ver Todos
             </Button>
           </div>
@@ -178,7 +218,7 @@ const ConsumerHome = () => {
                     </Badge>
                   </div>
                 </div>
-                
+
                 <div className="p-5 space-y-3">
                   <div className="flex items-start justify-between">
                     <h3 className="font-bold text-xl text-foreground group-hover:text-accent transition-smooth flex-1">
@@ -186,10 +226,12 @@ const ConsumerHome = () => {
                     </h3>
                     <div className="flex items-center gap-1 ml-2">
                       <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                      <span className="text-xs font-semibold">{event.rating}</span>
+                      <span className="text-xs font-semibold">
+                        {event.rating}
+                      </span>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-primary" />
@@ -204,10 +246,16 @@ const ConsumerHome = () => {
                       <span>{event.attendees.toLocaleString()} pessoas</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between pt-3 border-t border-border">
-                    <span className="font-bold text-primary">{event.price}</span>
-                    <Button size="sm" className="bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth text-white">
+                    <span className="font-bold text-primary">
+                      {event.price}
+                    </span>
+                    <Button
+                      size="sm"
+                      className="bg-gradient-to-r from-accent to-primary hover:shadow-glow transition-smooth text-white"
+                      onClick={() => onViewEventDetails?.(event.id)}
+                    >
                       Ver Detalhes
                     </Button>
                   </div>
