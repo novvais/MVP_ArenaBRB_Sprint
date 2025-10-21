@@ -147,7 +147,7 @@ function MeuComponente() {
     getPointsToNextLevel,     // Pontos faltantes
     getProgressPercentage,    // Porcentagem de progresso
   } = useRewards();
-  
+
   return <div>Pontos: {points}</div>;
 }
 ```
@@ -182,7 +182,7 @@ const { redeemReward } = useRewards();
 
 const handleRedeem = (rewardId: number) => {
   const success = redeemReward(rewardId);
-  
+
   if (success) {
     alert("Recompensa resgatada! 🎉");
   } else {
@@ -402,11 +402,10 @@ O sistema de pontos e recompensas está **100% funcional** e integrado na aba Ca
 - ✅ Aba renomeada de "Ingressos" para "Carteira"
 - ✅ Card de pontos clicável abre menu completo
 - ✅ Pop-up educativo na primeira vez
-- ✅ Recompensas organizadas em dialog
-- ✅ Interface mais limpa e focada
+- ✅ Recompensas organizadas em→ Veja seus pontos e recompensas!
 
 ---
 
-**Desenvolvido para Arena BRB MVP Sprint**  
-**Versão**: 1.0.0  
+**Desenvolvido para Arena BRB MVP Sprint**
+**Versão**: 1.0.0
 **Data**: Janeiro 2025

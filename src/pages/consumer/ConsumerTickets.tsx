@@ -163,17 +163,21 @@ const ConsumerTickets = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 pt-2">
-                      <div className="bg-gradient-primary p-4 rounded-xl text-white shadow-glow">
-                        <p className="text-xs mb-1 font-semibold uppercase opacity-90">
+                      <div className="bg-gradient-to-br from-primary to-primary/80 p-4 rounded-xl text-white shadow-glow">
+                        <p className="text-xs mb-1 font-semibold uppercase text-white/90">
                           Portão
                         </p>
-                        <p className="font-bold text-2xl">{ticket.gate}</p>
+                        <p className="font-bold text-2xl text-white">
+                          {ticket.gate}
+                        </p>
                       </div>
-                      <div className="bg-gradient-accent p-4 rounded-xl text-white shadow-glow">
-                        <p className="text-xs mb-1 font-semibold uppercase opacity-90">
+                      <div className="bg-gradient-to-br from-accent to-accent/80 p-4 rounded-xl text-white shadow-glow">
+                        <p className="text-xs mb-1 font-semibold uppercase text-white/90">
                           Assento
                         </p>
-                        <p className="font-bold text-2xl">{ticket.seat}</p>
+                        <p className="font-bold text-2xl text-white">
+                          {ticket.seat}
+                        </p>
                       </div>
                     </div>
 
