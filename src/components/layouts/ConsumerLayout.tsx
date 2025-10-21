@@ -1,4 +1,4 @@
-import { Home, Ticket, Map, User } from "lucide-react";
+import { Home, Wallet, Map, User } from "lucide-react";
 import { ReactNode } from "react";
 
 interface ConsumerLayoutProps {
@@ -7,20 +7,22 @@ interface ConsumerLayoutProps {
   onNavigate: (page: string) => void;
 }
 
-const ConsumerLayout = ({ children, currentPage, onNavigate }: ConsumerLayoutProps) => {
+const ConsumerLayout = ({
+  children,
+  currentPage,
+  onNavigate,
+}: ConsumerLayoutProps) => {
   const navItems = [
     { id: "home", label: "Início", icon: Home },
-    { id: "tickets", label: "Ingressos", icon: Ticket },
+    { id: "tickets", label: "Carteira", icon: Wallet },
     { id: "map", label: "Mapa", icon: Map },
     { id: "profile", label: "Perfil", icon: User },
   ];
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <main className="flex-1 overflow-y-auto pb-20">
-        {children}
-      </main>
-      
+      <main className="flex-1 overflow-y-auto pb-20">{children}</main>
+
       <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border">
         <div className="flex justify-around items-center h-16">
           {navItems.map((item) => {
