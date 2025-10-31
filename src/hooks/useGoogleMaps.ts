@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GOOGLE_MAPS_CONFIG } from "@/config/googleMaps";
-import { MapPoint } from "@/types/map";
+import { MapPoint, FloorPlan } from "@/types/map";
 
 // Declaração de tipos para window.google
 declare global {
@@ -20,6 +20,8 @@ interface UseGoogleMapsReturn {
   removeMarker: (id: string) => void;
   clearMarkers: () => void;
   fitBounds: (points: MapPoint[]) => void;
+  setFloorPlan: (floorPlan: FloorPlan | null) => void;
+  clearFloorPlan: () => void;
 }
 
 export const useGoogleMaps = (): UseGoogleMapsReturn => {
@@ -31,10 +33,15 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const openInfoWindowRef = useRef<google.maps.InfoWindow | null>(null);
+<<<<<<< HEAD
   const floorSelectorRef = useRef<HTMLDivElement | null>(null);
   const nativeIndoorControlRef = useRef<HTMLElement | null>(null);
   const observerRef = useRef<MutationObserver | null>(null);
   const isSearchingNativeControl = useRef<boolean>(false);
+=======
+  const floorPlanOverlayRef = useRef<google.maps.GroundOverlay | null>(null);
+  const floorPlanPolygonRef = useRef<google.maps.Polygon | null>(null);
+>>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
 
   // Inicializar o mapa apenas uma vez
   useEffect(() => {
@@ -444,25 +451,51 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
   // Função para buscar foto do local
   const getPlacePhoto = async (
     placeName: string,
-    position: { lat: number; lng: number }
+    position: { lat: number; lng: number },
+    isIndoorPoint: boolean = false
   ) => {
+    // Para pontos internos, não buscar fotos - retornar vazio imediatamente
+    if (isIndoorPoint) {
+      return "";
+    }
+
     try {
       if (!map) return "";
 
       const service = new google.maps.places.PlacesService(map);
 
+<<<<<<< HEAD
       const searchQueries = [
         placeName,
         `${placeName} Brasília`,
         `${placeName} DF Brasil`,
+=======
+      // Para pontos externos importantes, buscar com contexto específico da Arena BRB
+      const searchQueries = [
+        placeName.includes("Arena BRB") || placeName.includes("Mané Garrincha")
+          ? placeName
+          : `${placeName} Arena BRB Mané Garrincha`,
+        placeName.includes("Arena BRB") || placeName.includes("Mané Garrincha")
+          ? `${placeName} Brasília`
+          : `${placeName} Arena BRB`,
+        placeName.includes("Ginásio") || placeName.includes("Nilson Nelson")
+          ? placeName
+          : `${placeName} Ginásio Nilson Nelson`,
+        `${placeName} Brasília DF`,
+>>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
       ];
 
       for (const query of searchQueries) {
         const request = {
           query: query,
           location: new google.maps.LatLng(position.lat, position.lng),
+<<<<<<< HEAD
           radius: 5000,
           fields: ["photos", "name"],
+=======
+          radius: 500, // Reduzir raio para ser mais específico
+          fields: ["photos", "name", "place_id", "formatted_address"],
+>>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
         };
 
         const result = await new Promise<string>((resolve) => {
@@ -472,6 +505,7 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
               results &&
               results.length > 0
             ) {
+<<<<<<< HEAD
               const bestMatch = results[0];
               if (bestMatch.photos && bestMatch.photos.length > 0) {
                 const photo = bestMatch.photos[0];
@@ -480,6 +514,28 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
               } else {
                 resolve("");
               }
+=======
+              // Verificar se o resultado está próximo o suficiente (dentro de 500m)
+              const resultPosition = results[0].geometry?.location;
+              if (resultPosition && window.google?.maps?.geometry?.spherical) {
+                const distance =
+                  window.google.maps.geometry.spherical.computeDistanceBetween(
+                    new google.maps.LatLng(position.lat, position.lng),
+                    resultPosition
+                  );
+
+                // Só aceitar se estiver próximo (menos de 500 metros)
+                if (distance > 500) {
+                  resolve("");
+                  return;
+                }
+              }
+
+              const photo = results[0].photos[0];
+              const photoUrl = photo.getUrl({ maxWidth: 400, maxHeight: 300 });
+              console.log(`Foto encontrada para: ${query}`);
+              resolve(photoUrl);
+>>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
             } else {
               resolve("");
             }
@@ -526,8 +582,13 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
         // },
       });
 
-      // Buscar foto do local
-      const photoUrl = await getPlacePhoto(point.title, point.position);
+      // Buscar foto do local (apenas para pontos externos, não para internos)
+      const isIndoorPoint = point.floor !== undefined;
+      const photoUrl = await getPlacePhoto(
+        point.title,
+        point.position,
+        isIndoorPoint
+      );
 
       // Criar InfoWindow
       const infoWindow = new google.maps.InfoWindow({
@@ -546,7 +607,28 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
               <div style="margin: 16px 0;">
                 <img src="${photoUrl}" alt="${point.title}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
               </div>
+<<<<<<< HEAD
             ` : `
+=======
+            `
+                : isIndoorPoint
+                ? `
+              <div style="margin: 16px 0; padding: 30px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); border-radius: 10px; text-align: center; border: 2px solid #d1d5db;">
+                <div style="font-size: 48px; margin-bottom: 12px;">${
+                  point.icon || "📍"
+                }</div>
+                <p style="margin: 0; color: #6b7280; font-size: 13px; font-weight: 500;">Local interno da Arena BRB</p>
+                <p style="margin: 4px 0 0 0; color: #9ca3af; font-size: 12px;">${
+                  point.floor !== undefined
+                    ? `${
+                        point.floor === 0 ? "Térreo" : `${point.floor}º Andar`
+                      }`
+                    : ""
+                }</p>
+              </div>
+            `
+                : `
+>>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
               <div style="margin: 16px 0; padding: 20px; background: #f3f4f6; border-radius: 10px; text-align: center; border: 2px dashed #d1d5db;">
                 <p style="margin: 0; color: #6b7280; font-size: 14px;">📷 Imagem não disponível</p>
               </div>
@@ -639,6 +721,85 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
     [map]
   );
 
+  // Definir planta baixa (floor plan)
+  const setFloorPlan = useCallback(
+    (floorPlan: FloorPlan | null) => {
+      if (!map) return;
+
+      // Remover planta baixa anterior se houver (GroundOverlay e Polygon)
+      if (floorPlanOverlayRef.current) {
+        floorPlanOverlayRef.current.setMap(null);
+        floorPlanOverlayRef.current = null;
+      }
+      if (floorPlanPolygonRef.current) {
+        floorPlanPolygonRef.current.setMap(null);
+        floorPlanPolygonRef.current = null;
+      }
+
+      // Adicionar nova planta baixa
+      if (floorPlan) {
+        const bounds = new google.maps.LatLngBounds(
+          new google.maps.LatLng(floorPlan.bounds.south, floorPlan.bounds.west),
+          new google.maps.LatLng(floorPlan.bounds.north, floorPlan.bounds.east)
+        );
+
+        // Se houver stadiumShape, usar Polygon em vez de GroundOverlay
+        if (floorPlan.stadiumShape && floorPlan.stadiumShape.length > 0) {
+          // Criar array de LatLng para o Polygon
+          const polygonPath = floorPlan.stadiumShape.map(
+            (coord) => new google.maps.LatLng(coord.lat, coord.lng)
+          );
+
+          // Criar Polygon com formato oval/elíptico do estádio
+          const polygon = new google.maps.Polygon({
+            paths: polygonPath,
+            strokeColor: "#FF9800", // Laranja para destacar
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FFE0B2", // Laranja claro e semi-transparente
+            fillOpacity: 0.35,
+            clickable: false,
+            zIndex: 1, // Abaixo dos marcadores
+          });
+
+          polygon.setMap(map);
+          floorPlanPolygonRef.current = polygon;
+
+          // Ajustar zoom para mostrar o estádio
+          map.fitBounds(bounds);
+        } else {
+          // Fallback para GroundOverlay se não houver stadiumShape
+          const overlay = new google.maps.GroundOverlay(
+            floorPlan.overlayUrl,
+            bounds,
+            {
+              opacity: 0.6,
+            }
+          );
+
+          overlay.setMap(map);
+          floorPlanOverlayRef.current = overlay;
+
+          // Ajustar zoom para mostrar a planta baixa
+          map.fitBounds(bounds);
+        }
+      }
+    },
+    [map]
+  );
+
+  // Limpar planta baixa
+  const clearFloorPlan = useCallback(() => {
+    if (floorPlanOverlayRef.current) {
+      floorPlanOverlayRef.current.setMap(null);
+      floorPlanOverlayRef.current = null;
+    }
+    if (floorPlanPolygonRef.current) {
+      floorPlanPolygonRef.current.setMap(null);
+      floorPlanPolygonRef.current = null;
+    }
+  }, []);
+
   return {
     map,
     markers,
@@ -650,5 +811,7 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
     removeMarker,
     clearMarkers,
     fitBounds,
+    setFloorPlan,
+    clearFloorPlan,
   };
 };
