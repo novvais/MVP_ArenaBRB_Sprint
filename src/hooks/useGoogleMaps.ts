@@ -33,15 +33,12 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const openInfoWindowRef = useRef<google.maps.InfoWindow | null>(null);
-<<<<<<< HEAD
   const floorSelectorRef = useRef<HTMLDivElement | null>(null);
   const nativeIndoorControlRef = useRef<HTMLElement | null>(null);
   const observerRef = useRef<MutationObserver | null>(null);
   const isSearchingNativeControl = useRef<boolean>(false);
-=======
   const floorPlanOverlayRef = useRef<google.maps.GroundOverlay | null>(null);
   const floorPlanPolygonRef = useRef<google.maps.Polygon | null>(null);
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
 
   // Inicializar o mapa apenas uma vez
   useEffect(() => {
@@ -464,12 +461,6 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
 
       const service = new google.maps.places.PlacesService(map);
 
-<<<<<<< HEAD
-      const searchQueries = [
-        placeName,
-        `${placeName} Brasília`,
-        `${placeName} DF Brasil`,
-=======
       // Para pontos externos importantes, buscar com contexto específico da Arena BRB
       const searchQueries = [
         placeName.includes("Arena BRB") || placeName.includes("Mané Garrincha")
@@ -482,20 +473,14 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
           ? placeName
           : `${placeName} Ginásio Nilson Nelson`,
         `${placeName} Brasília DF`,
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
       ];
 
       for (const query of searchQueries) {
         const request = {
           query: query,
           location: new google.maps.LatLng(position.lat, position.lng),
-<<<<<<< HEAD
-          radius: 5000,
-          fields: ["photos", "name"],
-=======
           radius: 500, // Reduzir raio para ser mais específico
           fields: ["photos", "name", "place_id", "formatted_address"],
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
         };
 
         const result = await new Promise<string>((resolve) => {
@@ -505,16 +490,6 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
               results &&
               results.length > 0
             ) {
-<<<<<<< HEAD
-              const bestMatch = results[0];
-              if (bestMatch.photos && bestMatch.photos.length > 0) {
-                const photo = bestMatch.photos[0];
-                const photoUrl = photo.getUrl({ maxWidth: 500, maxHeight: 350 });
-                resolve(photoUrl);
-              } else {
-                resolve("");
-              }
-=======
               // Verificar se o resultado está próximo o suficiente (dentro de 500m)
               const resultPosition = results[0].geometry?.location;
               if (resultPosition && window.google?.maps?.geometry?.spherical) {
@@ -531,11 +506,14 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
                 }
               }
 
-              const photo = results[0].photos[0];
-              const photoUrl = photo.getUrl({ maxWidth: 400, maxHeight: 300 });
-              console.log(`Foto encontrada para: ${query}`);
-              resolve(photoUrl);
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
+              if (results[0].photos && results[0].photos.length > 0) {
+                const photo = results[0].photos[0];
+                const photoUrl = photo.getUrl({ maxWidth: 400, maxHeight: 300 });
+                console.log(`Foto encontrada para: ${query}`);
+                resolve(photoUrl);
+              } else {
+                resolve("");
+              }
             } else {
               resolve("");
             }
@@ -607,9 +585,6 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
               <div style="margin: 16px 0;">
                 <img src="${photoUrl}" alt="${point.title}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
               </div>
-<<<<<<< HEAD
-            ` : `
-=======
             `
                 : isIndoorPoint
                 ? `
@@ -628,7 +603,6 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
               </div>
             `
                 : `
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
               <div style="margin: 16px 0; padding: 20px; background: #f3f4f6; border-radius: 10px; text-align: center; border: 2px dashed #d1d5db;">
                 <p style="margin: 0; color: #6b7280; font-size: 14px;">📷 Imagem não disponível</p>
               </div>

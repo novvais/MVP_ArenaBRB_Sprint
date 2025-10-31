@@ -1,120 +1,223 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
-import {
-  getMapPoints,
-  getFloorPlans,
-  getMapPointsByFloor,
-  getFloorPlanByFloor,
-} from "@/data/mapPoints";
-import FloorSelector from "@/components/FloorSelector";
-import { Button } from "@/components/ui/button";
-import { MapPoint } from "@/types/map";
+import { getMapPoints, getFloorPlanByFloor } from "@/data/mapPoints";
 
 const ConsumerMap = () => {
-<<<<<<< HEAD
-  const { map, isLoaded, error, addMarker, fitBounds, mapRef } = useGoogleMaps();
-=======
   const {
     map,
     isLoaded,
     error,
     addMarker,
-    removeMarker,
-    clearMarkers,
     fitBounds,
     mapRef,
     setFloorPlan,
     clearFloorPlan,
   } = useGoogleMaps();
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
   const mapPoints = getMapPoints();
-  const floorPlans = getFloorPlans();
   const markersAdded = useRef(false);
-  const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
-  const [isIndoorMode, setIsIndoorMode] = useState(false);
+  const floorListenersAdded = useRef(false);
 
-  // Adicionar marcador quando o mapa estiver carregado (apenas uma vez)
+  // Adicionar marcador do Estádio Mané Garrincha quando o mapa estiver carregado
   useEffect(() => {
-    console.log("🔍 Debug ConsumerMap:", { isLoaded, map: !!map, mapPoints: mapPoints.length, markersAdded: markersAdded.current });
-    
     if (isLoaded && map && !markersAdded.current) {
       markersAdded.current = true;
-      console.log("✅ Condições atendidas, adicionando marcador...");
 
-<<<<<<< HEAD
-      // Adicionar apenas o marcador do Mané Garrincha
-      if (mapPoints.length > 0) {
-        console.log("📍 Chamando addMarker para:", mapPoints[0].title);
-        addMarker(mapPoints[0]);
-      } else {
-        console.log("⚠️ Nenhum ponto de mapa disponível");
+      // Filtrar apenas o ponto do Estádio Mané Garrincha
+      const arenaPoint = mapPoints.find((point) => point.id === "arena-brb");
+
+      if (arenaPoint) {
+        addMarker(arenaPoint);
+        fitBounds([arenaPoint]);
       }
-=======
-      // Adicionar apenas marcadores externos (sem andar) inicialmente
-      const externalPoints = mapPoints.filter(
-        (point) => point.floor === undefined
-      );
-      externalPoints.forEach((point) => {
-        addMarker(point);
-      });
-
-      // Ajustar zoom para mostrar todos os pontos externos
-      fitBounds(externalPoints.length > 0 ? externalPoints : mapPoints);
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
     }
-  }, [isLoaded, map, addMarker, mapPoints]);
+  }, [isLoaded, map, addMarker, mapPoints, fitBounds]);
 
-  // Lidar com mudança de andar
-  const handleFloorChange = (floor: number) => {
-    if (!map) return;
+  // Detectar mudanças no controle de andares nativo do Google Maps
+  useEffect(() => {
+    if (!isLoaded || !map || floorListenersAdded.current) return;
 
-    // Limpar marcadores atuais
-    clearMarkers();
+    let cleanup: (() => void) | null = null;
 
-    // Obter pontos do andar selecionado e pontos externos
-    const floorPoints = getMapPointsByFloor(floor);
-    const externalPoints = mapPoints.filter(
-      (point) => point.floor === undefined
-    );
-    const allPointsToShow = [...floorPoints, ...externalPoints];
+    const setupFloorListeners = () => {
+      // Procurar pelo controle nativo de andares
+      const indoorControl = document.querySelector(".gm-indoor-level-picker");
 
-    // Adicionar novos marcadores
-    allPointsToShow.forEach((point) => {
-      addMarker(point);
+      if (indoorControl && !floorListenersAdded.current) {
+        floorListenersAdded.current = true;
+        console.log(
+          "✅ Controle de andares nativo encontrado, configurando listeners..."
+        );
+
+        // Função para mapear o valor do controle para o número do andar
+        const mapFloorValue = (value: string): number | null => {
+          // O controle nativo pode ter valores como "3.5", "3", "2", "1", "0"
+          if (value === "3.5") return 3; // 3.5 mapeia para o 3º andar VIP
+          const numValue = parseFloat(value);
+          if (!isNaN(numValue)) {
+            return numValue;
+          }
+          return null;
+        };
+
+        // Função para atualizar a planta baixa baseada no botão selecionado
+        const updateFloorPlan = () => {
+          const buttons = indoorControl.querySelectorAll(
+            'div[role="button"], button, div[tabindex="0"]'
+          );
+
+          buttons.forEach((button) => {
+            const buttonElement = button as HTMLElement;
+            const computedStyle = window.getComputedStyle(buttonElement);
+            const bgColor = computedStyle.backgroundColor;
+
+            // Verificar se é o botão selecionado (pela cor de fundo azul do Google Maps)
+            const isSelected =
+              buttonElement.classList.contains("gm-selected") ||
+              buttonElement.getAttribute("aria-selected") === "true" ||
+              bgColor.includes("rgb(66, 133, 244)") || // Azul do Google Maps
+              bgColor.includes("rgb(26, 115, 232)") ||
+              bgColor === "rgb(66, 133, 244)" ||
+              bgColor === "rgb(26, 115, 232)";
+
+            if (isSelected) {
+              const floorText = buttonElement.textContent?.trim() || "";
+              const floorNumber = mapFloorValue(floorText);
+
+              if (floorNumber !== null) {
+                const floorPlan = getFloorPlanByFloor(floorNumber);
+                if (floorPlan) {
+                  setFloorPlan(floorPlan);
+                  console.log(
+                    `✅ Planta baixa atualizada para: ${floorPlan.floorName} (${floorText})`
+                  );
+                } else {
+                  clearFloorPlan();
+                  console.log(
+                    `⚠️ Andar ${floorText} não encontrado, limpando planta baixa`
+                  );
+                }
+              }
+            }
+          });
+        };
+
+        // Observar mudanças no controle usando MutationObserver
+        const observer = new MutationObserver(() => {
+          updateFloorPlan();
+        });
+
+        observer.observe(indoorControl, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ["class", "aria-selected"],
+        });
+
+        // Também observar mudanças de estilo
+        const styleObserver = new MutationObserver(() => {
+          updateFloorPlan();
+        });
+
+        // Observar mudanças de estilo em todos os botões
+        const buttons = indoorControl.querySelectorAll(
+          'div[role="button"], button, div[tabindex="0"]'
+        );
+        buttons.forEach((button) => {
+          styleObserver.observe(button, {
+            attributes: true,
+            attributeFilter: ["style", "class"],
+          });
+        });
+
+        // Adicionar listener de clique no container para capturar qualquer clique
+        const handleClick = (e: MouseEvent) => {
+          const target = e.target as HTMLElement;
+          if (target.closest(".gm-indoor-level-picker")) {
+            setTimeout(() => {
+              updateFloorPlan();
+            }, 150);
+          }
+        };
+
+        document.addEventListener("click", handleClick);
+
+        // Atualizar inicialmente
+        updateFloorPlan();
+
+        // Reobservar quando novos botões aparecerem
+        const checkNewButtons = setInterval(() => {
+          if (!indoorControl.parentNode) {
+            clearInterval(checkNewButtons);
+            floorListenersAdded.current = false;
+            // Chamar cleanup antes de retornar para evitar vazamentos de memória
+            if (cleanup) {
+              cleanup();
+            } else {
+              // Se cleanup ainda não foi definido, fazer limpeza manualmente
+              observer.disconnect();
+              styleObserver.disconnect();
+              document.removeEventListener("click", handleClick);
+            }
+            return;
+          }
+
+          const currentButtons = indoorControl.querySelectorAll(
+            'div[role="button"], button, div[tabindex="0"]'
+          );
+          currentButtons.forEach((button) => {
+            if (!button.hasAttribute("data-observed")) {
+              button.setAttribute("data-observed", "true");
+              styleObserver.observe(button, {
+                attributes: true,
+                attributeFilter: ["style", "class"],
+              });
+            }
+          });
+        }, 1000);
+
+        // Função de limpeza
+        cleanup = () => {
+          observer.disconnect();
+          styleObserver.disconnect();
+          document.removeEventListener("click", handleClick);
+          clearInterval(checkNewButtons);
+        };
+      }
+    };
+
+    // Tentar configurar imediatamente
+    setupFloorListeners();
+
+    // Se não encontrou, tentar novamente após delays
+    const timeout1 = setTimeout(() => {
+      if (!floorListenersAdded.current) {
+        setupFloorListeners();
+      }
+    }, 1000);
+
+    const timeout2 = setTimeout(() => {
+      if (!floorListenersAdded.current) {
+        setupFloorListeners();
+      }
+    }, 3000);
+
+    // Tentar quando o mapa fica "idle"
+    const idleListener = google.maps.event.addListener(map, "idle", () => {
+      setTimeout(() => {
+        if (!floorListenersAdded.current) {
+          setupFloorListeners();
+        }
+      }, 500);
     });
 
-    // Ajustar zoom
-    fitBounds(allPointsToShow);
-
-    // Definir planta baixa se existir
-    const floorPlan = getFloorPlanByFloor(floor);
-    if (floorPlan) {
-      setFloorPlan(floorPlan);
-      setSelectedFloor(floor);
-      setIsIndoorMode(true);
-    }
-  };
-
-  // Sair do modo indoor (voltar para visão externa)
-  const handleExitIndoorMode = () => {
-    if (!map) return;
-
-    clearMarkers();
-    clearFloorPlan();
-
-    // Adicionar apenas pontos externos
-    const externalPoints = mapPoints.filter(
-      (point) => point.floor === undefined
-    );
-    externalPoints.forEach((point) => {
-      addMarker(point);
-    });
-
-    fitBounds(externalPoints.length > 0 ? externalPoints : mapPoints);
-    setSelectedFloor(null);
-    setIsIndoorMode(false);
-  };
+    return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      google.maps.event.removeListener(idleListener);
+      if (cleanup) cleanup();
+    };
+  }, [isLoaded, map, setFloorPlan, clearFloorPlan]);
 
   if (error) {
     return (
@@ -148,18 +251,8 @@ const ConsumerMap = () => {
   return (
     <div className="h-screen flex flex-col bg-background">
       <header className="bg-card border-b border-border p-4 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-center relative">
+        <div className="max-w-6xl mx-auto flex items-center justify-center">
           <img src={logoConsumidorArenaBRB} alt="Arena BRB" className="h-12" />
-          {isIndoorMode && (
-            <Button
-              onClick={handleExitIndoorMode}
-              variant="outline"
-              size="sm"
-              className="absolute right-0"
-            >
-              🌐 Visão Externa
-            </Button>
-          )}
         </div>
       </header>
 
@@ -177,58 +270,7 @@ const ConsumerMap = () => {
           className="w-full h-full"
           style={{ minHeight: "400px" }}
         />
-
-        {/* Seletor de andares */}
-        <FloorSelector
-          floors={floorPlans.map((plan) => ({
-            floor: plan.floor,
-            floorName: plan.floorName,
-          }))}
-          selectedFloor={selectedFloor || -1}
-          onFloorChange={handleFloorChange}
-        />
-
-        {/* Indicador de andar atual */}
-        {isIndoorMode && selectedFloor !== null && (
-          <div className="absolute top-4 right-4 z-10 bg-white rounded-lg shadow-lg p-3">
-            <div className="text-sm font-semibold text-gray-700">
-              {floorPlans.find((p) => p.floor === selectedFloor)?.floorName}
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              Arena BRB Mané Garrincha
-            </div>
-          </div>
-        )}
       </div>
-
-<<<<<<< HEAD
-=======
-      <div className="bg-card border-t border-border p-4">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="font-bold text-foreground mb-2">
-            Arena BRB - Complexo Esportivo
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            SRPN - Brasília, DF, 70297-400
-          </p>
-          <div className="flex flex-wrap gap-4 mt-2 text-xs text-muted-foreground">
-            <span>🏟️ Arena BRB Mané Garrincha</span>
-            <span>🏀 Ginásio Nilson Nelson</span>
-            <span>🅿️ Estacionamento</span>
-            <span>🚪 Entradas/Saídas</span>
-            <span>🛗 Elevadores</span>
-            <span>🪜 Escadas</span>
-            <span>🍽️ Restaurantes</span>
-            <span>🚻 Banheiros</span>
-          </div>
-          {isIndoorMode && (
-            <p className="text-xs text-blue-600 font-medium mt-2">
-              ℹ️ Clique nos números à esquerda para navegar entre os andares
-            </p>
-          )}
-        </div>
-      </div>
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
     </div>
   );
 };

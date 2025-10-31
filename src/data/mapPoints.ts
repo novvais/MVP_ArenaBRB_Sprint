@@ -272,8 +272,6 @@ export const MAP_POINTS: MapPoint[] = [
     icon: "🏟️",
     // SEM floor para sempre aparecer
   },
-<<<<<<< HEAD
-=======
   {
     id: "ginasio-nilson-nelson",
     title: "Ginásio Nilson Nelson",
@@ -405,7 +403,6 @@ export const FLOOR_PLANS: FloorPlan[] = [
     },
     stadiumShape: STADIUM_SHAPE,
   },
->>>>>>> d010c148143f49af8e38e4d43619533b9b5c4c0b
 ];
 
 export const getMapPoints = (): MapPoint[] => {
