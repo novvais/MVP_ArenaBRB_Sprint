@@ -69,19 +69,32 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
 
         // Aguardar até o Google Maps estar completamente disponível
         let attempts = 0;
-        while ((!window.google || !window.google.maps || !window.google.maps.Map || !window.google.maps.MapTypeId) && attempts < 30) {
+        while (
+          (!window.google ||
+            !window.google.maps ||
+            !window.google.maps.Map ||
+            !window.google.maps.MapTypeId) &&
+          attempts < 30
+        ) {
           await new Promise((resolve) => setTimeout(resolve, 100));
           attempts++;
         }
-        
-        if (!window.google || !window.google.maps || !window.google.maps.Map || !window.google.maps.MapTypeId) {
+
+        if (
+          !window.google ||
+          !window.google.maps ||
+          !window.google.maps.Map ||
+          !window.google.maps.MapTypeId
+        ) {
           console.error("❌ Google Maps não está disponível:", {
             google: !!window.google,
             maps: !!window.google?.maps,
             Map: !!window.google?.maps?.Map,
             MapTypeId: !!window.google?.maps?.MapTypeId,
           });
-          throw new Error("Google Maps API não carregou completamente após 3 segundos");
+          throw new Error(
+            "Google Maps API não carregou completamente após 3 segundos"
+          );
         }
 
         if (mapRef.current && window.google && window.google.maps) {
@@ -122,17 +135,19 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
             zoomControl: true,
             clickableIcons: false,
             gestureHandling: "greedy",
-            // Habilitar controles de andares (indoor maps)
-            indoorPicker: true,
+            // Os controles de andares (indoor maps) aparecem automaticamente
+            // quando há dados disponíveis e o zoom está alto (19+)
           });
 
           // Configurar listener para detectar quando controles de andares aparecem
           // Os controles nativos aparecem automaticamente quando há dados de indoor
           // e o zoom está alto (19+)
-          google.maps.event.addListenerOnce(mapInstance, 'idle', () => {
+          google.maps.event.addListenerOnce(mapInstance, "idle", () => {
             // Verificar se controles de andares apareceram
             setTimeout(() => {
-              const indoorControl = document.querySelector('.gm-indoor-level-picker');
+              const indoorControl = document.querySelector(
+                ".gm-indoor-level-picker"
+              );
               if (indoorControl) {
                 console.log("✅ Controles de andares nativos detectados!");
               }
@@ -166,7 +181,7 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
       observerRef.current.disconnect();
       observerRef.current = null;
     }
-    
+
     if (floorSelectorRef.current && floorSelectorRef.current.parentNode) {
       floorSelectorRef.current.parentNode.removeChild(floorSelectorRef.current);
       floorSelectorRef.current = null;
@@ -181,14 +196,15 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
   }, []);
 
   // Função para criar controle de andares customizado (igual ao nativo do Google Maps)
-  const createFloorSelector = useCallback((mapInstance: google.maps.Map) => {
-    // Remover seletor existente
-    removeFloorSelector();
+  const createFloorSelector = useCallback(
+    (mapInstance: google.maps.Map) => {
+      // Remover seletor existente
+      removeFloorSelector();
 
-    // Criar container do seletor (estilo idêntico ao Google Maps)
-    const selector = document.createElement("div");
-    selector.id = "floor-selector";
-    selector.style.cssText = `
+      // Criar container do seletor (estilo idêntico ao Google Maps)
+      const selector = document.createElement("div");
+      selector.id = "floor-selector";
+      selector.style.cssText = `
       position: absolute;
       right: 20px;
       top: 50%;
@@ -205,21 +221,21 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
       font-family: Roboto, Arial, sans-serif;
     `;
 
-    // Andares disponíveis (ordem: 3.5, 3, 2, 1, 0)
-    const floors = [
-      { value: "3.5", label: "3.5" },
-      { value: "3", label: "3" },
-      { value: "2", label: "2" },
-      { value: "1", label: "1" },
-      { value: "0", label: "0" },
-    ];
+      // Andares disponíveis (ordem: 3.5, 3, 2, 1, 0)
+      const floors = [
+        { value: "3.5", label: "3.5" },
+        { value: "3", label: "3" },
+        { value: "2", label: "2" },
+        { value: "1", label: "1" },
+        { value: "0", label: "0" },
+      ];
 
-    let selectedFloor = "0"; // Padrão: térreo
+      let selectedFloor = "0"; // Padrão: térreo
 
-    floors.forEach((floor) => {
-      const button = document.createElement("div");
-      button.textContent = floor.label;
-      button.style.cssText = `
+      floors.forEach((floor) => {
+        const button = document.createElement("div");
+        button.textContent = floor.label;
+        button.style.cssText = `
         width: 36px;
         height: 32px;
         display: flex;
@@ -235,197 +251,231 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
         transition: background-color 0.1s;
       `;
 
-      button.addEventListener("mouseenter", () => {
-        if (selectedFloor !== floor.value) {
-          button.style.background = "#f5f5f5";
-        }
-      });
-
-      button.addEventListener("mouseleave", () => {
-        if (selectedFloor !== floor.value) {
-          button.style.background = "#ffffff";
-        }
-      });
-
-      button.addEventListener("click", (e) => {
-        // Prevenir propagação para evitar triggers múltiplos
-        e.stopPropagation();
-        
-        // Atualizar seleção visual
-        selectedFloor = floor.value;
-        floors.forEach((f, idx) => {
-          const btnElement = selector.children[idx] as HTMLElement;
-          if (btnElement) {
-            if (f.value === floor.value) {
-              btnElement.style.background = "#4285f4";
-              btnElement.style.color = "white";
-              btnElement.style.fontWeight = "500";
-            } else {
-              btnElement.style.background = "#ffffff";
-              btnElement.style.color = "#333333";
-              btnElement.style.fontWeight = "400";
-            }
+        button.addEventListener("mouseenter", () => {
+          if (selectedFloor !== floor.value) {
+            button.style.background = "#f5f5f5";
           }
         });
 
-        // Fechar o pop-up ao trocar de andar
-        if (openInfoWindowRef.current) {
-          openInfoWindowRef.current.close();
-          openInfoWindowRef.current = null;
-        }
+        button.addEventListener("mouseleave", () => {
+          if (selectedFloor !== floor.value) {
+            button.style.background = "#ffffff";
+          }
+        });
 
-        // Tentar mudar o andar usando o controle nativo
-        const tryChangeFloor = () => {
-          try {
-            // Usar referência guardada ou procurar novamente
-            let nativeControl: HTMLElement | null = nativeIndoorControlRef.current;
-            
-            if (!nativeControl) {
-              // Procurar controle nativo
-              nativeControl = document.querySelector('.gm-indoor-level-picker') as HTMLElement;
-              
-              if (!nativeControl && mapRef.current) {
-                const allDivs = mapRef.current.querySelectorAll('div');
-                for (const div of allDivs) {
-                  const text = div.textContent || '';
-                  if (text.includes('3.5') && text.includes('3') && text.includes('2') && text.includes('1') && text.includes('0')) {
-                    const style = window.getComputedStyle(div);
-                    const rect = div.getBoundingClientRect();
-                    if (style.position === 'absolute' && div !== floorSelectorRef.current && rect.right > window.innerWidth - 50) {
-                      nativeControl = div as HTMLElement;
-                      nativeIndoorControlRef.current = nativeControl;
-                      break;
+        button.addEventListener("click", (e) => {
+          // Prevenir propagação para evitar triggers múltiplos
+          e.stopPropagation();
+
+          // Atualizar seleção visual
+          selectedFloor = floor.value;
+          floors.forEach((f, idx) => {
+            const btnElement = selector.children[idx] as HTMLElement;
+            if (btnElement) {
+              if (f.value === floor.value) {
+                btnElement.style.background = "#4285f4";
+                btnElement.style.color = "white";
+                btnElement.style.fontWeight = "500";
+              } else {
+                btnElement.style.background = "#ffffff";
+                btnElement.style.color = "#333333";
+                btnElement.style.fontWeight = "400";
+              }
+            }
+          });
+
+          // Fechar o pop-up ao trocar de andar
+          if (openInfoWindowRef.current) {
+            openInfoWindowRef.current.close();
+            openInfoWindowRef.current = null;
+          }
+
+          // Tentar mudar o andar usando o controle nativo
+          const tryChangeFloor = () => {
+            try {
+              // Usar referência guardada ou procurar novamente
+              let nativeControl: HTMLElement | null =
+                nativeIndoorControlRef.current;
+
+              if (!nativeControl) {
+                // Procurar controle nativo
+                nativeControl = document.querySelector(
+                  ".gm-indoor-level-picker"
+                ) as HTMLElement;
+
+                if (!nativeControl && mapRef.current) {
+                  const allDivs = mapRef.current.querySelectorAll("div");
+                  for (const div of allDivs) {
+                    const text = div.textContent || "";
+                    if (
+                      text.includes("3.5") &&
+                      text.includes("3") &&
+                      text.includes("2") &&
+                      text.includes("1") &&
+                      text.includes("0")
+                    ) {
+                      const style = window.getComputedStyle(div);
+                      const rect = div.getBoundingClientRect();
+                      if (
+                        style.position === "absolute" &&
+                        div !== floorSelectorRef.current &&
+                        rect.right > window.innerWidth - 50
+                      ) {
+                        nativeControl = div as HTMLElement;
+                        nativeIndoorControlRef.current = nativeControl;
+                        break;
+                      }
                     }
                   }
                 }
               }
-            }
-            
-            if (nativeControl) {
-              // Procurar botões filhos (ordem: 3.5, 3, 2, 1, 0)
-              const children = Array.from(nativeControl.children);
-              const floorIndexMap: Record<string, number> = {
-                "3.5": 0,
-                "3": 1,
-                "2": 2,
-                "1": 3,
-                "0": 4,
-              };
-              const targetIndex = floorIndexMap[floor.value];
-              
-              if (children[targetIndex] && children[targetIndex] instanceof HTMLElement) {
-                // Clicar no botão correspondente
-                (children[targetIndex] as HTMLElement).click();
-                console.log(`✅ Mudado para andar ${floor.label} via controle nativo`);
-                return true;
-              } else {
-                // Tentar encontrar por texto
-                for (const child of children) {
-                  const text = (child.textContent || '').trim();
-                  if (text === floor.value || text === floor.label) {
-                    (child as HTMLElement).click();
-                    console.log(`✅ Mudado para andar ${floor.label} por texto`);
-                    return true;
+
+              if (nativeControl) {
+                // Procurar botões filhos (ordem: 3.5, 3, 2, 1, 0)
+                const children = Array.from(nativeControl.children);
+                const floorIndexMap: Record<string, number> = {
+                  "3.5": 0,
+                  "3": 1,
+                  "2": 2,
+                  "1": 3,
+                  "0": 4,
+                };
+                const targetIndex = floorIndexMap[floor.value];
+
+                if (
+                  children[targetIndex] &&
+                  children[targetIndex] instanceof HTMLElement
+                ) {
+                  // Clicar no botão correspondente
+                  (children[targetIndex] as HTMLElement).click();
+                  console.log(
+                    `✅ Mudado para andar ${floor.label} via controle nativo`
+                  );
+                  return true;
+                } else {
+                  // Tentar encontrar por texto
+                  for (const child of children) {
+                    const text = (child.textContent || "").trim();
+                    if (text === floor.value || text === floor.label) {
+                      (child as HTMLElement).click();
+                      console.log(
+                        `✅ Mudado para andar ${floor.label} por texto`
+                      );
+                      return true;
+                    }
                   }
                 }
               }
+
+              return false;
+            } catch (err) {
+              console.error("Erro ao mudar andar:", err);
+              return false;
             }
-            
-            return false;
-          } catch (err) {
-            console.error("Erro ao mudar andar:", err);
-            return false;
+          };
+
+          // Tentar imediatamente
+          if (!tryChangeFloor()) {
+            // Se não funcionou, tentar após um pequeno delay
+            setTimeout(() => {
+              tryChangeFloor();
+            }, 300);
           }
-        };
-        
-        // Tentar imediatamente
-        if (!tryChangeFloor()) {
-          // Se não funcionou, tentar após um pequeno delay
-          setTimeout(() => {
-            tryChangeFloor();
-          }, 300);
+        });
+
+        selector.appendChild(button);
+      });
+
+      // Adicionar ao container do mapa
+      if (mapRef.current) {
+        mapRef.current.appendChild(selector);
+        floorSelectorRef.current = selector;
+      }
+
+      // Observar se o controle nativo aparece (com proteção contra loop)
+      const observer = new MutationObserver(() => {
+        // Prevenir múltiplas execuções simultâneas
+        if (isSearchingNativeControl.current) {
+          return;
+        }
+
+        isSearchingNativeControl.current = true;
+
+        // Procurar controle nativo
+        let nativeControl = document.querySelector(
+          ".gm-indoor-level-picker"
+        ) as HTMLElement;
+
+        // Se não encontrou, procurar por texto e posição
+        if (!nativeControl && mapRef.current) {
+          const allDivs = mapRef.current.querySelectorAll("div");
+          for (const div of allDivs) {
+            const text = div.textContent || "";
+            // Verificar se contém todos os números dos andares
+            if (
+              text.includes("3.5") &&
+              text.includes("3") &&
+              text.includes("2") &&
+              text.includes("1") &&
+              text.includes("0")
+            ) {
+              const style = window.getComputedStyle(div);
+              const rect = div.getBoundingClientRect();
+              // Verificar se está à direita (onde o controle nativo geralmente aparece)
+              if (
+                style.position === "absolute" &&
+                div !== floorSelectorRef.current &&
+                rect.right > window.innerWidth - 50
+              ) {
+                nativeControl = div as HTMLElement;
+                break;
+              }
+            }
+          }
+        }
+
+        if (nativeControl && !nativeIndoorControlRef.current) {
+          // Guardar referência ao controle nativo para usar depois
+          nativeIndoorControlRef.current = nativeControl;
+          console.log("✅ Controle nativo detectado e armazenado!");
+
+          // Esconder nosso controle customizado se o nativo apareceu
+          if (floorSelectorRef.current) {
+            (floorSelectorRef.current as HTMLElement).style.display = "none";
+            console.log("👁️ Controle customizado escondido (usando nativo)");
+          }
+
+          // Desconectar observer imediatamente após encontrar o controle nativo
+          observer.disconnect();
+          observerRef.current = null;
+          isSearchingNativeControl.current = false;
+        } else {
+          isSearchingNativeControl.current = false;
         }
       });
 
-      selector.appendChild(button);
-    });
+      observerRef.current = observer;
 
-    // Adicionar ao container do mapa
-    if (mapRef.current) {
-      mapRef.current.appendChild(selector);
-      floorSelectorRef.current = selector;
-    }
-    
-    // Observar se o controle nativo aparece (com proteção contra loop)
-    const observer = new MutationObserver(() => {
-      // Prevenir múltiplas execuções simultâneas
-      if (isSearchingNativeControl.current) {
-        return;
+      // Observar mudanças no DOM
+      if (mapRef.current) {
+        observer.observe(mapRef.current, {
+          childList: true,
+          subtree: true,
+          attributes: false, // Não observar mudanças de atributos para reduzir triggers
+        });
       }
-      
-      isSearchingNativeControl.current = true;
-      
-      // Procurar controle nativo
-      let nativeControl = document.querySelector('.gm-indoor-level-picker') as HTMLElement;
-      
-      // Se não encontrou, procurar por texto e posição
-      if (!nativeControl && mapRef.current) {
-        const allDivs = mapRef.current.querySelectorAll('div');
-        for (const div of allDivs) {
-          const text = div.textContent || '';
-          // Verificar se contém todos os números dos andares
-          if (text.includes('3.5') && text.includes('3') && text.includes('2') && text.includes('1') && text.includes('0')) {
-            const style = window.getComputedStyle(div);
-            const rect = div.getBoundingClientRect();
-            // Verificar se está à direita (onde o controle nativo geralmente aparece)
-            if (style.position === 'absolute' && div !== floorSelectorRef.current && rect.right > window.innerWidth - 50) {
-              nativeControl = div as HTMLElement;
-              break;
-            }
-          }
+
+      // Parar observação após 5 segundos (reduzido de 10)
+      setTimeout(() => {
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+          observerRef.current = null;
         }
-      }
-      
-      if (nativeControl && !nativeIndoorControlRef.current) {
-        // Guardar referência ao controle nativo para usar depois
-        nativeIndoorControlRef.current = nativeControl;
-        console.log("✅ Controle nativo detectado e armazenado!");
-        
-        // Esconder nosso controle customizado se o nativo apareceu
-        if (floorSelectorRef.current) {
-          (floorSelectorRef.current as HTMLElement).style.display = 'none';
-          console.log("👁️ Controle customizado escondido (usando nativo)");
-        }
-        
-        // Desconectar observer imediatamente após encontrar o controle nativo
-        observer.disconnect();
-        observerRef.current = null;
         isSearchingNativeControl.current = false;
-      } else {
-        isSearchingNativeControl.current = false;
-      }
-    });
-    
-    observerRef.current = observer;
-    
-    // Observar mudanças no DOM
-    if (mapRef.current) {
-      observer.observe(mapRef.current, { 
-        childList: true, 
-        subtree: true,
-        attributes: false, // Não observar mudanças de atributos para reduzir triggers
-      });
-    }
-    
-    // Parar observação após 5 segundos (reduzido de 10)
-    setTimeout(() => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-      }
-      isSearchingNativeControl.current = false;
-    }, 5000);
-  }, [removeFloorSelector]);
+      }, 5000);
+    },
+    [removeFloorSelector]
+  );
 
   // Adicionar evento de clique no mapa para fechar InfoWindows e remover controle
   useEffect(() => {
@@ -508,7 +558,10 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
 
               if (results[0].photos && results[0].photos.length > 0) {
                 const photo = results[0].photos[0];
-                const photoUrl = photo.getUrl({ maxWidth: 400, maxHeight: 300 });
+                const photoUrl = photo.getUrl({
+                  maxWidth: 400,
+                  maxHeight: 300,
+                });
                 console.log(`Foto encontrada para: ${query}`);
                 resolve(photoUrl);
               } else {
@@ -573,15 +626,25 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
         content: `
           <div style="padding: 20px; max-width: 380px; font-family: Arial, sans-serif; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
             <div style="display: flex; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #3b82f6;">
-              <span style="font-size: 28px; margin-right: 12px;">${point.icon}</span>
-              <h3 style="margin: 0; font-size: 20px; font-weight: bold; color: #1f2937;">${point.title}</h3>
+              <span style="font-size: 28px; margin-right: 12px;">${
+                point.icon
+              }</span>
+              <h3 style="margin: 0; font-size: 20px; font-weight: bold; color: #1f2937;">${
+                point.title
+              }</h3>
             </div>
-            ${point.description ? `
+            ${
+              point.description
+                ? `
               <div style="margin: 12px 0; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
                 <p style="margin: 0; font-size: 15px; color: #374151; line-height: 1.5;">${point.description}</p>
               </div>
-            ` : ""}
-            ${photoUrl ? `
+            `
+                : ""
+            }
+            ${
+              photoUrl
+                ? `
               <div style="margin: 16px 0;">
                 <img src="${photoUrl}" alt="${point.title}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
               </div>
@@ -606,7 +669,8 @@ export const useGoogleMaps = (): UseGoogleMapsReturn => {
               <div style="margin: 16px 0; padding: 20px; background: #f3f4f6; border-radius: 10px; text-align: center; border: 2px dashed #d1d5db;">
                 <p style="margin: 0; color: #6b7280; font-size: 14px;">📷 Imagem não disponível</p>
               </div>
-            `}
+            `
+            }
             <div style="margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 10px; color: white;">
               <div style="display: flex; align-items: center;">
                 <span style="font-size: 16px; margin-right: 8px;">🕒</span>
