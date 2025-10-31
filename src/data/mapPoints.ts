@@ -9,6 +9,20 @@ const ARENA_CENTER = {
 // Delta para criar variações de posição (simulação de layout interno)
 const DELTA = 0.002;
 
+/**
+ * IMPORTANTE: 
+ * - Pontos INTERNOS (dentro do estádio - escadas, banheiros, restaurantes internos):
+ *   Estes dados NÃO estão disponíveis na Google Places API. Eles são informações
+ *   proprietárias da Arena BRB e precisam ser fornecidos manualmente ou através
+ *   de uma API própria da Arena.
+ * 
+ * - Pontos EXTERNOS (estádio principal, ginásio, grandes estacionamentos):
+ *   Estes PODEM ser buscados da Google Places API para obter coordenadas e
+ *   informações precisas.
+ * 
+ * ATUALMENTE: Todos os pontos estão definidos manualmente como dados estáticos
+ * porque não há integração ativa com a Places API ainda.
+ */
 // Pontos importantes distribuídos pelos andares
 export const MAP_POINTS: MapPoint[] = [
   // ANDAR TÉRREO (0)
