@@ -1,7 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import logoConsumidorArenaBRB from "@/assets/logo_consumidor_ArenaBRB.svg";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
-import { getMapPoints, getFloorPlanByFloor } from "@/data/mapPoints";
+import { getMapPoints, getFloorPlanByFloor, MapPoint } from "@/data/mapPoints";
+import { fetchExternalPointsFromPlaces } from "@/data/mapPointsApi";
+import { fetchFloorPlanByFloor } from "@/services/arenaBrbApi";
 
 const ConsumerMap = () => {
   const {
@@ -14,24 +16,49 @@ const ConsumerMap = () => {
     setFloorPlan,
     clearFloorPlan,
   } = useGoogleMaps();
-  const mapPoints = getMapPoints();
+  const [externalPoints, setExternalPoints] = useState<MapPoint[]>([]);
   const markersAdded = useRef(false);
   const floorListenersAdded = useRef(false);
+  const pointsFetched = useRef(false);
 
-  // Adicionar marcador do Estádio Mané Garrincha quando o mapa estiver carregado
+  // Buscar pontos externos da Google Places API quando o mapa carregar
   useEffect(() => {
-    if (isLoaded && map && !markersAdded.current) {
+    if (isLoaded && map && !pointsFetched.current) {
+      pointsFetched.current = true;
+
+      fetchExternalPointsFromPlaces(map)
+        .then((points) => {
+          setExternalPoints(points);
+          console.log(`✅ ${points.length} pontos externos buscados da Google Places API`);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar pontos externos da API:", error);
+        });
+    }
+  }, [isLoaded, map]);
+
+  // Adicionar marcador do Estádio Mané Garrincha quando os pontos externos forem carregados
+  useEffect(() => {
+    if (isLoaded && map && externalPoints.length > 0 && !markersAdded.current) {
       markersAdded.current = true;
 
       // Filtrar apenas o ponto do Estádio Mané Garrincha
-      const arenaPoint = mapPoints.find((point) => point.id === "arena-brb");
+      const arenaPoint = externalPoints.find((point) => point.id === "arena-brb");
 
       if (arenaPoint) {
         addMarker(arenaPoint);
         fitBounds([arenaPoint]);
+      } else {
+        // Fallback: usar dados estáticos se não encontrou na API
+        const staticPoints = getMapPoints();
+        const fallbackArenaPoint = staticPoints.find((point) => point.id === "arena-brb");
+        if (fallbackArenaPoint) {
+          addMarker(fallbackArenaPoint);
+          fitBounds([fallbackArenaPoint]);
+        }
       }
     }
-  }, [isLoaded, map, addMarker, mapPoints, fitBounds]);
+  }, [isLoaded, map, externalPoints, addMarker, fitBounds]);
 
   // Detectar mudanças no controle de andares nativo do Google Maps
   useEffect(() => {
@@ -85,18 +112,42 @@ const ConsumerMap = () => {
               const floorNumber = mapFloorValue(floorText);
 
               if (floorNumber !== null) {
-                const floorPlan = getFloorPlanByFloor(floorNumber);
-                if (floorPlan) {
-                  setFloorPlan(floorPlan);
-                  console.log(
-                    `✅ Planta baixa atualizada para: ${floorPlan.floorName} (${floorText})`
-                  );
-                } else {
-                  clearFloorPlan();
-                  console.log(
-                    `⚠️ Andar ${floorText} não encontrado, limpando planta baixa`
-                  );
-                }
+                // Busca planta baixa da API da Arena BRB
+                // Se não encontrar, usa dados estáticos como fallback
+                fetchFloorPlanByFloor(floorNumber)
+                  .then((floorPlanFromAPI) => {
+                    if (floorPlanFromAPI) {
+                      // Se encontrou na API, usar dados da API
+                      setFloorPlan(floorPlanFromAPI);
+                      console.log(
+                        `✅ Planta baixa da API: ${floorPlanFromAPI.floorName} (${floorText})`
+                      );
+                    } else {
+                      // Se não encontrou na API, usar dados estáticos como fallback
+                      const staticFloorPlan = getFloorPlanByFloor(floorNumber);
+                      if (staticFloorPlan) {
+                        setFloorPlan(staticFloorPlan);
+                        console.log(
+                          `✅ Planta baixa estática: ${staticFloorPlan.floorName} (${floorText})`
+                        );
+                      } else {
+                        clearFloorPlan();
+                        console.log(
+                          `⚠️ Andar ${floorText} não encontrado`
+                        );
+                      }
+                    }
+                  })
+                  .catch((error) => {
+                    // Em caso de erro na API, usar dados estáticos
+                    console.error("Erro ao buscar da API, usando dados estáticos:", error);
+                    const staticFloorPlan = getFloorPlanByFloor(floorNumber);
+                    if (staticFloorPlan) {
+                      setFloorPlan(staticFloorPlan);
+                    } else {
+                      clearFloorPlan();
+                    }
+                  });
               }
             }
           });
