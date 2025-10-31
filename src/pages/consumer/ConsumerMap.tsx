@@ -4,25 +4,27 @@ import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import { getMapPoints } from "@/data/mapPoints";
 
 const ConsumerMap = () => {
-  const { map, isLoaded, error, addMarker, fitBounds, mapRef } =
-    useGoogleMaps();
+  const { map, isLoaded, error, addMarker, fitBounds, mapRef } = useGoogleMaps();
   const mapPoints = getMapPoints();
   const markersAdded = useRef(false);
 
-  // Adicionar marcadores quando o mapa estiver carregado (apenas uma vez)
+  // Adicionar marcador quando o mapa estiver carregado (apenas uma vez)
   useEffect(() => {
+    console.log("🔍 Debug ConsumerMap:", { isLoaded, map: !!map, mapPoints: mapPoints.length, markersAdded: markersAdded.current });
+    
     if (isLoaded && map && !markersAdded.current) {
       markersAdded.current = true;
+      console.log("✅ Condições atendidas, adicionando marcador...");
 
-      // Adicionar marcadores
-      mapPoints.forEach((point) => {
-        addMarker(point);
-      });
-
-      // Ajustar zoom para mostrar todos os pontos
-      fitBounds(mapPoints);
+      // Adicionar apenas o marcador do Mané Garrincha
+      if (mapPoints.length > 0) {
+        console.log("📍 Chamando addMarker para:", mapPoints[0].title);
+        addMarker(mapPoints[0]);
+      } else {
+        console.log("⚠️ Nenhum ponto de mapa disponível");
+      }
     }
-  }, [isLoaded, map, addMarker, fitBounds, mapPoints]);
+  }, [isLoaded, map, addMarker, mapPoints]);
 
   if (error) {
     return (
@@ -77,21 +79,6 @@ const ConsumerMap = () => {
         />
       </div>
 
-      <div className="bg-card border-t border-border p-4">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="font-bold text-foreground mb-2">
-            Arena BRB - Complexo Esportivo
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            SRPN - Brasília, DF, 70297-400
-          </p>
-          <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
-            <span>🏟️ Arena BRB Mané Garrincha</span>
-            <span>🏀 Ginásio Nilson Nelson</span>
-            <span>🅿️ Estacionamento</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

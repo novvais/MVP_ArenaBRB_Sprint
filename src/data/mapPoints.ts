@@ -12,28 +12,6 @@ export const MAP_POINTS: MapPoint[] = [
     type: "venue",
     icon: "🏟️",
   },
-  {
-    id: "ginasio-nilson-nelson",
-    title: "Ginásio Nilson Nelson",
-    description: "Ginásio para eventos esportivos e atividades",
-    position: {
-      lat: -15.784,
-      lng: -47.9005,
-    },
-    type: "venue",
-    icon: "🏀",
-  },
-  {
-    id: "estacionamento-nilson-nelson",
-    title: "Estacionamento Nilson Nelson",
-    description: "Área de estacionamento para visitantes",
-    position: {
-      lat: -15.7845,
-      lng: -47.901,
-    },
-    type: "parking",
-    icon: "🅿️",
-  },
 ];
 
 export const getMapPoints = (): MapPoint[] => {
